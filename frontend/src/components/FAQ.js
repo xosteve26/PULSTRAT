@@ -3,7 +3,7 @@ import React from 'react'
 const FAQ = () => {
     return (
         <>
-            <section class="relative py-16 bg-white min-w-screen animation-fade animation-delay">
+            <section class="relative py-16 bg-white min-w-screen animation-fade animation-delay" id="faq">
                 <div class="container px-0 px-8 mx-auto sm:px-12 xl:px-5">
                     <p class="text-xs font-bold text-left text-yellow-400 uppercase sm:mx-6 sm:text-center sm:text-normal sm:font-bold">
                         Got a Question? We’ve got answers.

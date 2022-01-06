@@ -1,9 +1,11 @@
 import React from 'react'
+import Header from '../components/Header'
 
 const SignUpScreen = () => {
     return (
         <>
-                        <section class="w-full bg-white">
+            <Header />
+            <section class="w-full bg-white">
 
                 <div class="mx-auto max-w-7xl">
                     <div class="flex flex-col lg:flex-row">
