@@ -24,7 +24,7 @@ const DashboardScreen = () => {
                             </div>
                             <div class="flex-1 text-right md:text-center">
                                 <h5 class="font-bold uppercase text-gray-500">Infection Presence</h5>
-                                <h3 class="font-bold text-3xl"> <span class="text-green-500"><i class="fas fa-caret-up"></i></span></h3>
+                                        <h3 class="font-bold text-3xl"> YES<span class="text-green-500"><i class="fa-light fa-caret-up"></i></span></h3>
                             </div>
                         </div>
                     </div>
