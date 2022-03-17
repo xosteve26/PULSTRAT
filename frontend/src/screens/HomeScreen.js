@@ -51,7 +51,7 @@ const HomeScreen = () => {
                 
                     <div className="box-border w-full text-black border-solid md:w-1/2 md:pl-6 xl:pl-32">
                         <h2 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
-                            Autoamted Prognostic Model
+                            Autoamted Diagnostic Model
                         </h2>
                         <p className="pt-4 pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-10 lg:text-lg">
                             An assistant to help verify your prognosis, to ensure assurity of your results.

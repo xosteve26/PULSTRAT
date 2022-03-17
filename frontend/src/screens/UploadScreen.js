@@ -1,7 +1,14 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Header from '../components/Header'
 
 const UploadScreen = () => {
+    const [file, setFile] = useState(null)
+    const[fileName, setFileName] = useState('')
+
+    const fileUploadHandler = (e) => {
+        setFile(e.target.files[0])
+        setFileName(e.target.files[0].name)
+    }
     return (
         <>
         <Header />
@@ -26,10 +33,12 @@ const UploadScreen = () => {
                                 <div class="relative h-40 rounded-lg border-dashed border-2 border-gray-200 bg-white flex justify-center items-center hover:cursor-pointer">
                                     <div class="absolute">
                                         <div class="flex flex-col items-center "> <i class="fa fa-cloud-upload fa-3x text-gray-200"></i> <span class="block text-gray-400 font-normal">Attach you files here</span> <span class="block text-gray-400 font-normal">or</span> <span class="block text-blue-400 font-normal">Browse files</span> </div>
-                                    </div> <input type="file" class="h-full w-full opacity-0" name="" />
+                                    </div> <input type="file" class="h-full w-full opacity-0" name="" onChange={fileUploadHandler}/>
                                 </div>
                                 <div class="flex justify-between items-center text-gray-400"> <span>Accepted file type:.jpeg only</span> <span class="flex items-center "><i class="fa fa-lock mr-1"></i> secure</span> </div>
                             </div>
+                            <label>Chosen files</label>
+                            <input type="text" name="email" class="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder={fileName} />
                             <div class="block">
                                 <button class="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">Upload</button>
                             </div>
