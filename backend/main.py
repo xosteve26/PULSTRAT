@@ -23,7 +23,6 @@ def fileUpload():
     target = UPLOAD_FOLDER
     if not os.path.isdir(target):
         os.mkdir(target)
-    # logger.info("welcome to upload`")
     file = request.files['file']
     filename = secure_filename(file.filename)
     destination = "/".join([UPLOAD_FOLDER, filename])

@@ -5,13 +5,13 @@ import axios from 'axios'
 const UploadScreen = () => {
     const [file, setFile] = useState(null)
     const[fileName, setFileName] = useState('')
-    const[preview, setPreview] = useState(null)
+    
     console.log(file)
+
     const fileUploadHandler = (e) => {
         setFile(e.target.files[0])
         setFileName(e.target.files[0].name)
         
-        console.log("preview",preview)
     }
   
     const uploadHandler = async(e) => {
@@ -20,13 +20,8 @@ const UploadScreen = () => {
         data.append('file', file)
         data.append('filename', fileName)
         const res=await axios.post('http://192.168.0.112:5000/upload', data)
-        const {filePath}=res.data
-        console.log("path",filePath)
-        setPreview(data.get('file'))
-        console.log("data",data.get('file'))
-
-    }
-    console.log("after",preview)
+       
+    } 
    
     return (
         <>
@@ -37,11 +32,16 @@ const UploadScreen = () => {
                 <div class="flex flex-col items-center md:flex-row">
 
                     <div class="w-full space-y-5 md:w-3/5 md:pr-16">
-                        <p class="font-medium text-yellow-400 uppercase">Building Businesses</p>
-                        <h2 class="text-2xl font-extrabold leading-none text-black sm:text-3xl md:text-5xl">
-                            Kindly upload your scanned image on the right.
-                        </h2>
-                        <p class="text-xl text-gray-600 md:pr-16">Your data is secured with us, kindly attach an appropriate title along with the attachment for better understandability.</p>
+                        <p class="font-medium text-yellow-400 uppercase">{file ? 'Preview':'Building Businesses'}</p>
+                        {file? null:
+                        <>
+                            <h2 class="text-2xl font-extrabold leading-none text-black sm:text-3xl md:text-5xl">
+                                Kindly upload your scanned image on the right.
+                            </h2>
+                            <p class="text-xl text-gray-600 md:pr-16">Your data is secured with us, kindly attach an appropriate title along with the attachment for better understandability.</p>
+                        </>}
+    
+                            {file && <img src={URL.createObjectURL(file)} alt="preview" width='400px' height='400px' />}
                     </div>
                 
                    <div class="w-full mt-16 md:mt-0 md:w-2/5">
@@ -70,7 +70,7 @@ const UploadScreen = () => {
                 </div>
             </div>
         </section>
-        {preview && <img src={preview} alt="preview" />}
+            
         </>
     )
 }
