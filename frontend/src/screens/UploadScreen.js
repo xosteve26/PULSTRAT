@@ -1,14 +1,33 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Header from '../components/Header'
+import axios from 'axios'
 
 const UploadScreen = () => {
     const [file, setFile] = useState(null)
     const[fileName, setFileName] = useState('')
-
+    const[preview, setPreview] = useState(null)
+    console.log(file)
     const fileUploadHandler = (e) => {
         setFile(e.target.files[0])
         setFileName(e.target.files[0].name)
+        
+        console.log("preview",preview)
     }
+  
+    const uploadHandler = async(e) => {
+        e.preventDefault();
+        const data=new FormData()
+        data.append('file', file)
+        data.append('filename', fileName)
+        const res=await axios.post('http://192.168.0.112:5000/upload', data)
+        const {filePath}=res.data
+        console.log("path",filePath)
+        setPreview(data.get('file'))
+        console.log("data",data.get('file'))
+
+    }
+    console.log("after",preview)
+   
     return (
         <>
         <Header />
@@ -24,8 +43,9 @@ const UploadScreen = () => {
                         </h2>
                         <p class="text-xl text-gray-600 md:pr-16">Your data is secured with us, kindly attach an appropriate title along with the attachment for better understandability.</p>
                     </div>
-
+                
                    <div class="w-full mt-16 md:mt-0 md:w-2/5">
+                    <form onSubmit={uploadHandler} encType='multipart/form-data'>
                         <div class="relative z-10 h-auto p-8 py-10 overflow-hidden bg-white border-b-2 border-gray-300 shadow-2xl px-7 rounded-3xl">
                             <h3 class="mb-6 text-2xl font-medium text-center">Upload Your Scanned Image</h3>
                             <input type="text" name="email" class="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder="Title" />
@@ -40,16 +60,17 @@ const UploadScreen = () => {
                             <label>Chosen files</label>
                             <input type="text" name="email" class="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder={fileName} />
                             <div class="block">
-                                <button class="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">Upload</button>
+                                <button type='submit' class="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">Upload</button>
                             </div>
                             <p class="w-full mt-4 text-sm text-center text-gray-500">Don't have an account? <a href="#_" class="text-blue-500 underline">Sign up here</a></p>
                         </div>
+                        </form>
                     </div>
-
+                      
                 </div>
             </div>
         </section>
-            
+        {preview && <img src={preview} alt="preview" />}
         </>
     )
 }
