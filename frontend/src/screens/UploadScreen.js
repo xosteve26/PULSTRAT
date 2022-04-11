@@ -17,9 +17,14 @@ const UploadScreen = () => {
     const uploadHandler = async(e) => {
         e.preventDefault();
         const data=new FormData()
+        const baseURL='http://localhost:5000'
+        const headers={
+            'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': '*'
+        }
         data.append('file', file)
         data.append('filename', fileName)
-        const res=await axios.post('http://192.168.0.112:5000/upload', data)
+        const res = await axios.post(`${baseURL}/upload`, data,headers)
        
     } 
    
@@ -32,11 +37,16 @@ const UploadScreen = () => {
                 <div class="flex flex-col items-center md:flex-row">
 
                     <div class="w-full space-y-5 md:w-3/5 md:pr-16">
-                        <p class="font-medium text-yellow-400 uppercase">{file ? 'Preview':'Building Businesses'}</p>
-                        {file? null:
+                        
+                        {file? <>
+                                <h2 class="text-sm font-extrabold leading-none text-yellow-400 sm:text-3xl md:text-5xl">
+                                    Preview
+                                </h2>
+                        </>:
                         <>
+                        <p class="font-medium text-yellow-400 uppercase">Building Businesses</p>
                             <h2 class="text-2xl font-extrabold leading-none text-black sm:text-3xl md:text-5xl">
-                                Kindly upload your scanned image on the right.
+                                        Kindly upload your scanned image on the right.
                             </h2>
                             <p class="text-xl text-gray-600 md:pr-16">Your data is secured with us, kindly attach an appropriate title along with the attachment for better understandability.</p>
                         </>}
