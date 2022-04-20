@@ -46,7 +46,7 @@ const UploadScreen = () => {
             setPrediction(res.data.prediction)
             setLoading(false)
 
-            navigate('/dashboard', { state: { prediction: res.data.prediction } })
+            navigate('/report', { state: { prediction: res.data.prediction } })
         }
         
 

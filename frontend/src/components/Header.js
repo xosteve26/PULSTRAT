@@ -1,6 +1,12 @@
 import React from 'react'
 
 const Header = () => {
+    const userExists=window.sessionStorage.getItem('LoggedIn')
+
+    const logoutHandler = () =>{
+        window.sessionStorage.clear()
+        window.location.href = '/'
+    }
     return (
         <>
             <section className="w-full px-6 pb-12 antialiased bg-white">
@@ -21,15 +27,18 @@ const Header = () => {
                                         <a href="#features" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Features</a>
                                         <a href="#faq" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">FAQ</a>
                                         <a href="#_" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Contact</a>
-                                        <a href="/dashboard" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Dashboard</a>
-                                        <a href="/upload" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Upload</a>
+                                        {userExists&&<>
+                                        {/* <a href="/dashboard" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Dashboard</a> */}
+                                        <a href="/upload" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Upload</a> </>}
                                         <a href="#_" className="absolute top-0 left-0 hidden py-2 mt-6 ml-10 mr-2 text-gray-600 lg:inline-block md:mt-0 md:ml-2 lg:mx-3 md:relative">
                                             {/* <svg className="inline w-5 h-5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> */}
                                         </a>
                                     </div>
                                     <div className="flex flex-col items-start justify-end w-full pt-4 md:items-center md:w-1/3 md:flex-row md:py-0">
-                                        <a href="/sign-in" className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Sign In</a>
-                                        <a href="/sign-up" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Sign Up</a>
+                                        {!userExists ? <><a href="/sign-in" className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Sign In</a>
+                                            <a href="/sign-up" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Sign Up</a> </> 
+                                            : <> <a href="#" onClick={logoutHandler} className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Logout</a>  
+                                            <a href="/dashboard" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Dashboard</a> </> }
                                     </div>
                                 </div>
                             </div>
