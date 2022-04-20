@@ -4,7 +4,8 @@ from flask import Flask, flash, request, redirect, url_for, session
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import logging
-
+from flask import json
+from flask import jsonify
 from PIL import Image
 import matplotlib.pyplot as plt
 import tensorflow as tf
@@ -13,6 +14,9 @@ from tensorflow import keras
 from tensorflow.keras.models import *
 from tensorflow.keras import preprocessing
 from keras.preprocessing.image import load_img, img_to_array
+import pymongo
+from dotenv import load_dotenv
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,7 +30,16 @@ CLASSIFIER_MODEL = "./model/model92.h5"
 app = Flask(__name__)
 cors = CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+conn_str = os.environ['MONGO_URI']
+client = pymongo.MongoClient(conn_str, serverSelectionTimeoutMS=5000)
+try:
+    print(client.server_info())
+except Exception:
+    print("Unable to connect to the server.")
 
+db = client.get_database('xmed')
+# coll=db.users
+# coll.insert_one({"name":"naveen G"})
 
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
@@ -46,13 +59,11 @@ def fileUpload():
 
     img = Image.open(file)
     result = predict(destination)
+    print("RES =",result)
 
-    return response
+    return jsonify(prediction=bool(result))
 
 def predict(destination):
-
-    print("INPUT",model.inputs)
-    print("OUTPUT",model.outputs)
 
     test_image = load_img(
         destination, target_size=(180, 180))
@@ -81,8 +92,13 @@ def predict(destination):
 
     print("PNEUMONIA result is:", predictions[0][0]>0.5)
     result = predictions[0][0]>0.5
-
+    print(result)
+    
     return result
+
+
+
+
 
 
 if __name__ == "__main__":
