@@ -1,11 +1,16 @@
 import React from 'react'
+import axios from 'axios'
 
 const Header = () => {
     const userExists=window.sessionStorage.getItem('LoggedIn')
 
-    const logoutHandler = () =>{
+    const logoutHandler = async() =>{
         window.sessionStorage.clear()
-        window.location.href = '/'
+        const res=await axios.get('http://localhost:5000/logout',{withCredentials:true})
+        if (res.data.status){
+            window.location.href = '/'
+        }
+        
     }
     return (
         <>
@@ -16,7 +21,7 @@ const Header = () => {
                         <div className="container relative flex flex-wrap items-center justify-between h-24 mx-auto overflow-hidden font-medium border-b border-gray-200 md:overflow-visible lg:justify-center sm:px-4 md:px-2">
                             <div className="flex items-center justify-start w-1/4 h-full pr-4">
                                 <a href="#_" className="inline-block py-4 md:py-0">
-                                    <span className="p-1 text-xl font-black leading-none text-gray-900"><span>tails</span><span className="text-yellow-400">.</span></span>
+                                    <span className="p-1 text-xl font-black leading-none text-gray-900"><span className="text-yellow-400">.</span><span>XMED</span><span className="text-yellow-400">.</span></span>
                                 </a>
                             </div>
                             <div className="top-0 left-0 items-start hidden w-full h-full p-4 text-sm bg-gray-900 bg-opacity-50 md:items-center md:w-3/4 md:absolute lg:text-base md:bg-transparent md:p-0 md:relative md:flex">
@@ -37,7 +42,7 @@ const Header = () => {
                                     <div className="flex flex-col items-start justify-end w-full pt-4 md:items-center md:w-1/3 md:flex-row md:py-0">
                                         {!userExists ? <><a href="/sign-in" className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Sign In</a>
                                             <a href="/sign-up" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Sign Up</a> </> 
-                                            : <> <a href="#" onClick={logoutHandler} className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Logout</a>  
+                                            : <> <button onClick={logoutHandler} className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Logout</button>  
                                             <a href="/dashboard" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Dashboard</a> </> }
                                     </div>
                                 </div>
