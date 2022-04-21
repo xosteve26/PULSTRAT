@@ -119,3 +119,4 @@ backend/__pycache__
 backend/venv
 backend/uploaded_images
 backend/.env
+backend/flask_session

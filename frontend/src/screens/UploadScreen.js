@@ -31,7 +31,8 @@ const UploadScreen = () => {
         const baseURL='http://localhost:5000'
         const headers={
             'Content-Type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'withCredentials' : true
         }
         if (!file) {
             setError(true)
@@ -42,11 +43,13 @@ const UploadScreen = () => {
             data.append('file', file)
             data.append('filename', fileName)
             const res = await axios.post(`${baseURL}/upload`, data, headers)
-            console.log(res)
+            console.log("RES",res)
             setPrediction(res.data.prediction)
             setLoading(false)
 
-            navigate('/report', { state: { prediction: res.data.prediction } })
+            
+
+            navigate('/report', { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId } })
         }
         
 
