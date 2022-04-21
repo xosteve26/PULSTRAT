@@ -4,7 +4,7 @@ from bson import ObjectId
 from flask import request, flash, request, redirect, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
-from . import app, UPLOAD_FOLDER, user_collection
+from . import app, UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
 
 @app.route('/upload', methods=['POST', 'GET'])

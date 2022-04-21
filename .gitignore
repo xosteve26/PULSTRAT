@@ -119,7 +119,4 @@ backend/__pycache__
 backend/venv
 backend/uploaded_images
 backend/.env
-<<<<<<< HEAD
-=======
 backend/flask_session
->>>>>>> logout, scan routes creation + logout route + minor changes
