@@ -11,7 +11,7 @@ const SignInSCreen = () => {
         e.preventDefault()
         const baseURL = 'http://localhost:5000'
         const data=JSON.stringify({email,password})
-        const res = await axios.post(`${baseURL}/login`, {email,password})
+        const res = await axios.post(`${baseURL}/login`, {email,password}, {withCredentials:true})
         console.log(res.data.status)
         if(res.data.status){
             window.sessionStorage.setItem('LoggedIn', true)
