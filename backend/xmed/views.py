@@ -1,21 +1,21 @@
 import os, json, bcrypt
-import datetime as dt
+import datetime
 from bson import ObjectId
 from flask import request, flash, request, redirect, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
-from . import app, UPLOAD_FOLDER, user_collection, prediction_collection
+from . import app,UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
 
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
     print("Requested files", request.files)
-    target = UPLOAD_FOLDER
+    target = "../uploaded_images"
     if not os.path.isdir(target):
         os.mkdir(target)
     file = request.files['file']
     filename = secure_filename(file.filename)
-    destination = "/".join([UPLOAD_FOLDER, filename])
+    destination = "/".join(["../uploaded_images", filename])
 
     print(destination)
     file.save(destination)
@@ -24,14 +24,14 @@ def fileUpload():
     response = {'filePath': destination}
 
     img = Image.open(file)
-    result = predict(destination)
+    result = helpers.predict(destination)
     print("RES =", result)
 
     print("upload", session.get('email'))
     scan_id = prediction_collection.insert_one(
         {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"], "timestamps": datetime.datetime.utcnow()})
     print(session["id"]["$oid"])
-    scan_id = parse_json(scan_id.inserted_id)
+    scan_id = helpers.parse_json(scan_id.inserted_id)
     print(scan_id['$oid'])
     print(type(scan_id['$oid']))
     return jsonify(prediction=bool(result), name=session["name"], timestamps=str(datetime.datetime.utcnow()), userId=str(session["id"]["$oid"]),id=scan_id['$oid'])
@@ -47,7 +47,7 @@ def login():
     id = findUser["_id"]
     session["email"] = email
     session["name"] = findUser["name"]
-    session["id"] = parse_json(id)
+    session["id"] = helpers.parse_json(id)
 
     print("LOGIN SESSION", session)
     print(id)
@@ -92,7 +92,7 @@ def get_scans():
     scansObj = prediction_collection.find({"userId": ObjectId(session["id"]["$oid"])})
 
     for scan in scansObj:
-        scans.append(parse_json(scan))
+        scans.append(helpers.parse_json(scan))
 
     return jsonify(scans=scans)
 

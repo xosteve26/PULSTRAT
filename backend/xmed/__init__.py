@@ -27,7 +27,7 @@ class ApplicationConfig:
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
-cors = CORS(app)
+cors = CORS(app ,supports_credentials=True)
 
 server_session=Session(app)
 
