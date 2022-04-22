@@ -4,18 +4,20 @@ from bson import ObjectId
 from flask import request, flash, request, redirect, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
+import base64
 from . import app,UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
 
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
     print("Requested files", request.files)
-    target = "../uploaded_images"
+    target = "./uploaded_images"
     if not os.path.isdir(target):
         os.mkdir(target)
     file = request.files['file']
     filename = secure_filename(file.filename)
-    destination = "/".join(["../uploaded_images", filename])
+    destination = "/".join(["./uploaded_images", filename])
+    
 
     print(destination)
     file.save(destination)
@@ -24,17 +26,21 @@ def fileUpload():
     response = {'filePath': destination}
 
     img = Image.open(file)
+    with open(destination, "rb") as img_file:
+        encoded_image = base64.b64encode(img_file.read())
+   
+
     result = helpers.predict(destination)
     print("RES =", result)
 
     print("upload", session.get('email'))
     scan_id = prediction_collection.insert_one(
-        {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"], "timestamps": datetime.datetime.utcnow()})
+        {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"], "timestamps": datetime.datetime.utcnow(), "image":encoded_image.decode("utf-8")})
     print(session["id"]["$oid"])
     scan_id = helpers.parse_json(scan_id.inserted_id)
     print(scan_id['$oid'])
     print(type(scan_id['$oid']))
-    return jsonify(prediction=bool(result), name=session["name"], timestamps=str(datetime.datetime.utcnow()), userId=str(session["id"]["$oid"]),id=scan_id['$oid'])
+    return jsonify(prediction=bool(result), name=session["name"], timestamps=str(datetime.datetime.utcnow()), userId=str(session["id"]["$oid"]),id=scan_id['$oid'], img=encoded_image.decode("utf-8"))
 
 @app.route('/login', methods=["POST"])
 def login():
