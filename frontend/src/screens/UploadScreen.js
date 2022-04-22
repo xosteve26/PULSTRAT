@@ -49,7 +49,7 @@ const UploadScreen = () => {
 
             
 
-            navigate('/report', { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId } })
+            navigate('/report', { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId, img:res.data.img } })
         }
         
 
@@ -59,7 +59,7 @@ const UploadScreen = () => {
     return (
         <>
         <Header />
-            
+    
         <section class="w-full px-8 py-16 bg-gray-100 xl:px-8">
             <div class="max-w-5xl mx-auto">
                 <div class="flex flex-col items-center md:flex-row">
