@@ -9,7 +9,7 @@ const SignInSCreen = () => {
 
     const submitHandler = async(e) => {
         e.preventDefault()
-        const baseURL = 'http://74.220.18.176:5000'
+        const baseURL = 'http://localhost:5000'
         const data=JSON.stringify({email,password})
         const res = await axios.post(`${baseURL}/login`, {email,password}, {withCredentials:true})
         console.log(res.data.status)

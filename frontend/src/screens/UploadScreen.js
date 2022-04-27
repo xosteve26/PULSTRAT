@@ -28,7 +28,7 @@ const UploadScreen = () => {
         setLoading(true)
         
         const data=new FormData()
-        const baseURL ='http://74.220.18.176:5000'
+        const baseURL='http://localhost:5000'
         const headers={
             'Content-Type': 'multipart/form-data',
             'Access-Control-Allow-Origin': '*',

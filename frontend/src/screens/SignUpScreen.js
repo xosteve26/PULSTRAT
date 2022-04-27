@@ -10,7 +10,7 @@ const SignUpScreen = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault()
-        const baseURL = 'http://74.220.18.176:5000'
+        const baseURL = 'http://localhost:5000'
         const data = JSON.stringify({ email, password, name })
         const res = await axios.post(`${baseURL}/register`, { email, password, name })
         console.log(res.data.status)
