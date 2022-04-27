@@ -6,7 +6,7 @@ const Header = () => {
 
     const logoutHandler = async() =>{
         window.sessionStorage.clear()
-        const res=await axios.get('http://localhost:5000/logout',{withCredentials:true})
+        const res = await axios.get('http://74.220.18.176:5000/logout',{withCredentials:true})
         if (res.data.status){
             window.location.href = '/'
         }
