@@ -81,7 +81,7 @@ const ReportComponent = React.forwardRef((props, ref) => {
                 <td>{userDataObject.email}</td>
                 <td>93.15%</td>
                 <td class="text-right">
-                  {location.state.prediction == 'true' ? (
+                  {location.state.prediction ? (
                     <span class="text-green-600">
                       {"Positive".toUpperCase()}
                     </span>
@@ -121,7 +121,7 @@ const ReportScreen = () => {
   let ud = window.sessionStorage.getItem("userData");
   const userDataObject = JSON.parse(ud);
   console.log(userDataObject);
-  console.log("location", Boolean(location.state.prediction));
+  console.log("location", location.state.prediction);
 
   return (
     <>
@@ -153,12 +153,12 @@ const ReportScreen = () => {
                       </h5>
                       <h3
                         class={
-                          location.state.prediction == 'true'
+                          location.state.prediction
                             ? "font-bold text-3xl text-green-500"
                             : "font-bold text-3xl text-red-500"
                         }
                       >
-                        {location.state.prediction == 'true'
+                        {location.state.prediction
                           ? "POSITIVE"
                           : "NEGATIVE"}
                       </h3>
@@ -183,7 +183,7 @@ const ReportScreen = () => {
                         Diagnosed Infection
                       </h5>
                       <h3 class="font-bold text-3xl">
-                        {location.state.prediction == "true"
+                        {location.state.prediction
                           ? "PNEUMONIA"
                           : "Null"}{" "}
                         <span class="text-pink-500">
