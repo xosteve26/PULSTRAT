@@ -20,7 +20,7 @@ const Header = () => {
                     <nav className="relative z-50 h-24 select-none" x-data="{ showMenu: false }">
                         <div className="container relative flex flex-wrap items-center justify-between h-24 mx-auto overflow-hidden font-medium border-b border-gray-200 md:overflow-visible lg:justify-center sm:px-4 md:px-2">
                             <div className="flex items-center justify-start w-1/4 h-full pr-4">
-                                <a href="#_" className="inline-block py-4 md:py-0">
+                                <a href="#_" className=" relative z-10 flex items-center w-auto text-2xl font-extrabold leading-none text-black select-none">
                                     <span className="p-1 text-xl font-black leading-none text-gray-900"><span className="text-yellow-400">.</span><span>XMED</span><span className="text-yellow-400">.</span></span>
                                 </a>
                             </div>
@@ -28,10 +28,30 @@ const Header = () => {
                                 <div className="flex-col w-full h-auto overflow-hidden bg-white rounded-lg md:bg-transparent md:overflow-visible md:rounded-none md:relative md:flex md:flex-row">
                                     <a href="#_" className="inline-flex items-center block w-auto h-16 px-6 text-xl font-black leading-none text-gray-900 md:hidden">tails<span className="text-yellow-400">.</span></a>
                                     <div className="flex flex-col items-start justify-center w-full space-x-6 text-center lg:space-x-8 md:w-2/3 md:mt-0 md:flex-row md:items-center">
-                                        <a href="/" className="inline-block w-full py-2 mx-0 ml-6 font-medium text-left text-yellow-400 md:ml-0 md:w-auto md:px-0 md:mx-2 lg:mx-3 md:text-center">Home</a>
-                                        <a href="#features" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Features</a>
-                                        <a href="#faq" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">FAQ</a>
-                                        <a href="#_" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Contact</a>
+                                        <a href="/" class="relative font-medium leading-6 text-gray-900 transition duration-150 ease-out hover:text-yellow-400" x-data="{ hover: false }" >
+                                            <span class="block">Home</span>
+                                            {/* <span class="absolute bottom-0 left-0 inline-block w-full h-0.5 -mb-1 overflow-hidden">
+                                                <span x-show="hover" class="absolute inset-0 inline-block w-full h-1 h-full transform bg-gray-900" xTransitionEnter="transition ease duration-200" xTransitionEnterStart="scale-0" xTransitionEnterEnd="scale-100" xTransitionLeave="transition ease-out duration-300" xTransitionLeaveStart="scale-100" xTransitionLeaveEnd="scale-0"></span>
+                                            </span> */}
+                                        </a>
+                                        <a href="/#features" class="relative font-medium leading-6 text-gray-700 transition duration-150 ease-out hover:text-yellow-400" x-data="{ hover: false }" >
+                                            <span class="block">Features</span>
+                                            {/* <span class="absolute bottom-0 left-0 inline-block w-full h-0.5 -mb-1 overflow-hidden">
+                                                <span x-show="hover" class="absolute inset-0 inline-block w-full h-1 h-full transform bg-gray-900" xTransitionEnter="transition ease duration-200" xTransitionEnterStart="scale-0" xTransitionEnterEnd="scale-100" xTransitionLeave="transition ease-out duration-300" xTransitionLeaveStart="scale-100" xTransitionLeaveEnd="scale-0"></span>
+                                            </span> */}
+                                        </a>
+                                        <a href="/#faq" class="relative font-medium leading-6 text-gray-600 transition duration-150 ease-out hover:text-yellow-400" x-data="{ hover: false }" >
+                                            <span class="block">FAQ</span>
+                                            {/* <span class="absolute bottom-0 left-0 inline-block w-full h-0.5 -mb-1 overflow-hidden">
+                                                <span x-show="hover" class="absolute inset-0 inline-block w-full h-1 h-full transform bg-gray-900" xTransitionEnter="transition ease duration-200" xTransitionEnterStart="scale-0" xTransitionEnterEnd="scale-100" xTransitionLeave="transition ease-out duration-300" xTransitionLeaveStart="scale-100" xTransitionLeaveEnd="scale-0"></span>
+                                            </span> */}
+                                        </a>
+                                        <a href="/#contact" class="relative font-medium leading-6 text-gray-600 transition duration-150 ease-out hover:text-yellow-400" x-data="{ hover: false }" >
+                                            <span class="block">Contact</span>
+                                            {/* <span class="absolute bottom-0 left-0 inline-block w-full h-0.5 -mb-1 overflow-hidden">
+                                                <span x-show="hover" class="absolute inset-0 inline-block w-full h-1 h-full transform bg-gray-900" xTransitionEnter="transition ease duration-200" xTransitionEnterStart="scale-0" xTransitionEnterEnd="scale-100" xTransitionLeave="transition ease-out duration-300" xTransitionLeaveStart="scale-100" xTransitionLeaveEnd="scale-0"></span>
+                                            </span> */}
+                                        </a>
                                         {userExists&&<>
                                         {/* <a href="/dashboard" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Dashboard</a> */}
                                         <a href="/upload" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Upload</a> </>}
@@ -47,14 +67,7 @@ const Header = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div  className="absolute right-0 flex flex-col items-center items-end justify-center w-10 h-10 bg-white rounded-full cursor-pointer md:hidden hover:bg-gray-100">
-                                {/* <svg className="w-6 h-6 text-gray-700" x-show="!showMenu" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path d="M4 6h16M4 12h16M4 18h16"></path>
-                                </svg>
-                                <svg className="w-6 h-6 text-gray-700" x-show="showMenu" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg> */}
-                            </div>
+                            
                         </div>
                     </nav>
 
