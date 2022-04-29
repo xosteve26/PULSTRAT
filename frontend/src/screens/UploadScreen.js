@@ -28,7 +28,7 @@ const UploadScreen = () => {
         setLoading(true)
         
         const data=new FormData()
-        const baseURL='http://localhost:5000'
+        const baseURL=process.env.REACT_APP_BASE_URL
         const headers={
             'Content-Type': 'multipart/form-data',
             'Access-Control-Allow-Origin': '*',

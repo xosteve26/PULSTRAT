@@ -9,7 +9,8 @@ const SignInSCreen = () => {
 
     const submitHandler = async(e) => {
         e.preventDefault()
-        const baseURL = 'http://localhost:5000'
+        const baseURL = process.env.REACT_APP_BASE_URL
+        console.log("ENV VAR",baseURL)
         const data=JSON.stringify({email,password})
         const res = await axios.post(`${baseURL}/login`, {email,password}, {withCredentials:true})
         console.log(res.data.status)
