@@ -14,7 +14,7 @@ const DashboardScreen = () => {
         navigate('/report', { state: { prediction: result } });
     }
     useEffect(async() => {
-        const res = await axios.get('http://localhost:5000/scans', { withCredentials: true });
+        const res = await axios.get(process.env.REACT_APP_BASE_URL+'/scans', { withCredentials: true });
         setData(res.data.scans);
         setReceived(true);
         console.log(res.data.scans);
