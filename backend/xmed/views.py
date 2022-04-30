@@ -8,6 +8,11 @@ import base64
 from . import app,UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
 
+
+@app.route('/', methods=["GET", "POST"])
+def initial():
+    return "WELCOME"
+
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
     print("Requested files", request.files)
@@ -44,21 +49,24 @@ def fileUpload():
 
 @app.route('/login', methods=["POST"])
 def login():
-
+    print("IN LOGIN")
     data = json.loads(request.data)
     email = data["email"]
     password = data["password"]
     findUser = user_collection.find_one({"email":email})
+    if not findUser:
+        return {"status":False}
     print("USER", findUser)
-    id = findUser["_id"]
-    session["email"] = email
-    session["name"] = findUser["name"]
-    session["id"] = helpers.parse_json(id)
-
-    print("LOGIN SESSION", session)
-    print(id)
+    
     hashedPassword = findUser["password"]
     if bcrypt.checkpw(password.encode(), hashedPassword):
+        id = findUser["_id"]
+        session["email"] = email
+        session["name"] = findUser["name"]
+        session["id"] = helpers.parse_json(id)
+
+        print("LOGIN SESSION", session)
+        print(id)
         print("It Matches!")
         return {"status":True, "userData":json.dumps({"id":helpers.parse_json(id),"name":findUser["name"], "email":findUser["email"]})}
     else:
@@ -77,12 +85,10 @@ def register():
     name = data["name"]
     email = data["email"]
     password = data["password"]
-
-    hashedPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-
     if(user_collection.find_one({"email": email})):
         return {"status": False, "message": "USER WITH THIS EMAIL EXISTS"}
     else:
+        hashedPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         user_collection.insert_one({
             "name": name,
             "email": email,
@@ -104,8 +110,5 @@ def get_scans():
 
 @app.route('/logout',methods=["GET"])
 def logout():
-    session.pop('email')
-    session.pop('id')
-    session.pop('name')
-
+    session.clear()
     return {"status":True}

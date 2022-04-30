@@ -34,11 +34,11 @@ server_session=Session(app)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('HELLO WORLD')
 
-conn_str = os.environ['MONGO_URI']
-client = pymongo.MongoClient(conn_str, serverSelectionTimeoutMS=5000)
+# conn_str = os.environ['MONGO_URI']
+client = pymongo.MongoClient(
+    os.environ.get("MONGO_URI"), serverSelectionTimeoutMS=5000)
 try:
-    # print(client.server_info())
-    pass
+    print(client.server_info())
 except Exception:
     print("Unable to connect to the server.")
 
