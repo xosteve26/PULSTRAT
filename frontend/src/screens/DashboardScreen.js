@@ -29,35 +29,35 @@ const DashboardScreen = () => {
                 <span className="block text-yellow-400 xl:inline"> History</span>
 
             </h1>
-            {!received && <><div class="grid place-items-center h-screen"><ThreeBody
+            {!received && <><div className="grid place-items-center h-screen"><ThreeBody
                 size={50}
                 speed={1.1}
                 color="black"
                 style="content-center"
             /></div></>}
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             
-            <table class="w-full text-md text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table className="w-full text-md text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" className="px-6 py-3">
                             Scan ID
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" className="px-6 py-3">
                             Name
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" className="px-6 py-3">
                             Diagnosis
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" className="px-6 py-3">
                             Category
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" className="px-6 py-3">
                             Date
                         </th>
                         
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">View</span>
+                        <th scope="col" className="px-6 py-3">
+                            <span className="sr-only">View</span>
                         </th>
                     </tr>
                 </thead>
@@ -65,23 +65,23 @@ const DashboardScreen = () => {
                        
                     
                     {received  && data.map(item => (
-                        <tr key={item._id.$oid.toString()} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                        <tr key={item._id.$oid.toString()} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                 {item._id.$oid.toString()}
                             </th>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                 {item.name}
                             </th>
-                            <td class="px-6 py-4">
-                                {item.result==false ? <span class="text-red-600">Negative</span> : <span class="text-green-600">Positive</span>}
+                            <td className="px-6 py-4">
+                                {item.result==false ? <span className="text-red-600">Negative</span> : <span className="text-green-600">Positive</span>}
                             </td>
-                            <td class="px-6 py-4">
+                            <td className="px-6 py-4">
                                 PNEUMONIA
                             </td>
-                            <td class="px-6 py-4">
+                            <td className="px-6 py-4">
                                 {item.timestamps['$date']}
                             </td>
-                            <td class="px-6 py-4 text-right">
+                            <td className="px-6 py-4 text-right">
                                 <button type='button' onClick={() => navigate('/report', { state: { prediction: item.result, name:item.name, id:item._id.$oid.toString(), timestamps:item.timestamps['$date'], userId:item.userId.$oid.toString(), img:item.image } })} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
                             </td>
                         </tr>
