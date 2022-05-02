@@ -28,6 +28,7 @@ const SignInSCreen = () => {
         else{
             window.sessionStorage.setItem('LoggedIn', false)
             setError(true)
+            setLoading(false)
         }
 
     }
@@ -53,7 +54,9 @@ const SignInSCreen = () => {
                                     <input type="text" name="email" className="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder="Email address" onChange={(e)=>setEmail(e.target.value)}/>
                                     <input type="password" name="password" className="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                                     <div className="block flex justify-center">
-                                        {!Loading && <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">{!Loading && 'Log Me In '}</button>}
+                                        {!Loading  && !error &&<button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">Log Me In</button>}
+                                        {!Loading && error && <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">Log Me In</button>}
+                                        
                                         {Loading && <div><Ripples
                                             size={45}
                                             speed={2}
