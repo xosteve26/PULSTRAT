@@ -2,14 +2,18 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import axios from 'axios'
+import { Ripples } from '@uiball/loaders'
+
 
 const SignInSCreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
+    const [Loading, setLoading] = useState(false)
 
     const submitHandler = async(e) => {
         e.preventDefault()
+        setLoading(true)
         const baseURL = process.env.REACT_APP_BASE_URL
         console.log("ENV VAR",baseURL)
         const data=JSON.stringify({email,password})
@@ -19,6 +23,7 @@ const SignInSCreen = () => {
             window.sessionStorage.setItem('LoggedIn', true)
             window.sessionStorage.setItem("userData", res.data.userData)
             window.location.href = '/'
+            
         }
         else{
             window.sessionStorage.setItem('LoggedIn', false)
@@ -47,8 +52,15 @@ const SignInSCreen = () => {
                                     <h3 className="mb-6 text-2xl font-medium text-center">Sign in to your Account</h3>
                                     <input type="text" name="email" className="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder="Email address" onChange={(e)=>setEmail(e.target.value)}/>
                                     <input type="password" name="password" className="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-                                    <div className="block">
-                                        <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">Log Me In</button>
+                                    <div className="block flex justify-center">
+                                        {!Loading && <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">{!Loading && 'Log Me In '}</button>}
+                                        {Loading && <div><Ripples
+                                            size={45}
+                                            speed={2}
+                                            color="black"
+                                            className='items-center'
+                                        /></div>}
+                                        
                                     </div>
                             </form>
                                 {error && <div className="flex justify-between items-center text-red-400"> <span>Invalid Credentials</span>  </div>}
