@@ -120,5 +120,7 @@ backend/venv
 backend/uploaded_images
 backend/.env
 backend/flask_session
-xmed-key.pem
+
 backend/test.py
+xmed-key.pem
+
