@@ -49,7 +49,7 @@ const UploadScreen = () => {
 
             
 
-            navigate('/report', { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId, img:res.data.img } })
+            navigate('/report', { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId, img:res.data.img, heatmap:res.data.heatmap, localized:res.data.localized } })
         }
         
 
@@ -108,7 +108,7 @@ const UploadScreen = () => {
                                                 color="black"
                                             />}</button>
                             </div>
-                            <p className="w-full mt-4 text-sm text-center text-gray-500">Don't have an account? <a href="#_" className="text-blue-500 underline">Sign up here</a></p>
+                            <p className="w-full mt-4 text-sm text-center text-gray-500">Don't have an account? <a href="/sign-up" className="text-blue-500 underline">Sign up here</a></p>
                         </div>
                         </form>
                     </div>
