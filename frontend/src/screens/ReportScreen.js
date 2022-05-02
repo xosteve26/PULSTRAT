@@ -99,11 +99,40 @@ const ReportComponent = React.forwardRef((props, ref) => {
         <div className="pt-6 flex justify-center ">
 
 
-          <div><img src={"data:image/jpeg;base64," + location.state.img} /></div>
+          <div>Original Scan<img src={"data:image/jpeg;base64," + location.state.img} /></div>
+          <div className="pl-6">Localized Scan<img src={"data:image/jpeg;base64," + location.state.localized} /></div><br />
+          
+          
+          
 
 
           {/* <p className="pt-6 text-xl font-bold">1860.00 €</p> */}
         </div>
+        <div className="flex justify-center ">
+
+
+          <div><img src={"data:image/jpeg;base64," + location.state.heatmap} /></div>
+
+
+
+
+
+          {/* <p className="pt-6 text-xl font-bold">1860.00 €</p> */}
+        </div>
+        {/* <div className="pt-6 flex justify-center ">
+
+
+          
+          <div className="pt-8">Localized Scan<img src={"data:image/jpeg;base64," + location.state.localized} /></div><br />
+
+
+
+
+
+        
+        </div> */}
+        
+        
         {/* <div className="pt-16 text-sm">
                     <p className="font-bold">PAYMENT ADVICE</p>
                     <p>Account name: MB Road apples</p>
