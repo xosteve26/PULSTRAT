@@ -1,26 +1,19 @@
-const webpack = require("webpack");
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const webpack = require('webpack');
+const dotenv = require('dotenv');
 
-module.exports = {
-    /* ... */
+module.exports = () => {
+    // call dotenv and it will return an Object with a parsed key 
+    const env = dotenv.config().parsed;
 
-    resolve: {
-        fallback: {
-            process: require.resolve("process/browser"),
-            zlib: false,
-            stream: require.resolve("stream-browserify"),
-            util: require.resolve("util"),
-            buffer: require.resolve("buffer"),
-            asset: require.resolve("assert"),
-        }
-    },
-    plugins: [
-        new NodePolyfillPlugin(),
-        new webpack.ProvidePlugin({
-            Buffer: ["buffer", "Buffer"],
-            process: "process/browser",
-        }),
-    ]
+    // reduce it to a nice object, the same as before
+    const envKeys = Object.keys(env).reduce((prev, next) => {
+        prev[`process.env.${next}`] = JSON.stringify(env[next]);
+        return prev;
+    }, {});
 
-    /* ... */
-}
+    return {
+        plugins: [
+            new webpack.DefinePlugin(envKeys)
+        ]
+    };
+};
