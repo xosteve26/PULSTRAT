@@ -7,6 +7,8 @@ const SignUpScreen = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState(false)
+    const [Loading, setLoading] = useState(false)
 
     const submitHandler = async (e) => {
         e.preventDefault()
@@ -19,7 +21,8 @@ const SignUpScreen = () => {
             window.location.href = '/sign-in'
         }
         else {
-            alert('Invalid Credentials')
+            setError(true)
+            setLoading(false)
         }
 
     }
@@ -35,15 +38,15 @@ const SignUpScreen = () => {
                                 className="relative flex flex-col items-center justify-center w-full h-full px-10 my-20 lg:px-16 lg:my-0">
                                 <div className="flex flex-col items-start space-y-8 tracking-tight lg:max-w-3xl">
                                     <div className="relative">
-                                        <p className="mb-2 font-medium text-gray-700 uppercase">Work smarter</p>
-                                        <h2 className="text-5xl font-bold text-gray-900 xl:text-6xl">Features to help you work smarter
+                                        <p className="mb-2 font-medium text-yellow-400 uppercase">Welcome</p>
+                                        <h2 className="text-5xl font-bold text-gray-900 xl:text-6xl">You've Made The <span className="text-5xl font-bold text-yellow-400 xl:text-6xl">Right Choice</span>
                                         </h2>
                                     </div>
-                                    <p className="text-2xl text-gray-700">We've created a simple formula to follow in order to gain more
-                                        out of your business and your application.</p>
-                                    <a href="#_"
+                                    <p className="text-2xl text-gray-700">Enter You Authentication Details To Gain Access To Full Functionality Of Our Product.</p>
+                                    {/* <a href="#_"
                                         className="inline-block px-8 py-5 text-xl font-medium text-center text-white transition duration-200 bg-yellow-400 hover:bg-yellow-500 ease rounded-full">Get
-                                        Started Today</a>
+                                        Started Today</a> */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +55,7 @@ const SignUpScreen = () => {
                             <div className="flex flex-col items-start justify-start w-full h-full p-10 lg:p-16 xl:p-24">
                                 <h4 className="w-full text-3xl font-bold">Signup</h4>
                                 <form onSubmit={submitHandler}>
-                                <p className="text-lg text-gray-500">or, if you have an account you can <a href="#_"
+                                <p className="text-lg text-gray-500">or, if you have an account you can <a href="/sign-in"
                                         className="text-yellow-400 underline">sign in</a></p>
                                 <div className="relative w-full mt-10 space-y-8">
                                     <div className="relative">
@@ -77,9 +80,7 @@ const SignUpScreen = () => {
                                         <button type='submit'
                                             className="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-yellow-400 hover:bg-yellow-500 ease rounded-full">Create
                                             Account</button>
-                                        <a href="#_"
-                                            className="inline-block w-full px-5 py-4 mt-3 text-lg font-bold text-center text-gray-900 transition duration-200 bg-white border border-gray-300 hover:bg-gray-100 ease rounded-full">Sign
-                                            up with Google</a>
+                                        {error && <div className="pt-6 flex justify-between items-center text-red-400"> <span>Enter Valid Values In All Fields</span>  </div>}
                                     </div>
                                   
                                 </div>

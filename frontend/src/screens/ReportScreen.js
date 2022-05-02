@@ -24,6 +24,7 @@ const ReportComponent = React.forwardRef((props, ref) => {
   let ud = window.sessionStorage.getItem("userData");
   const userDataObject = JSON.parse(ud);
   console.log("REP LOC", Boolean(location.state.prediction))
+  console.log(location)
 
   return (
     <>
@@ -97,13 +98,34 @@ const ReportComponent = React.forwardRef((props, ref) => {
 
         </div>
         <div className="pt-6 flex justify-center ">
+          <div>Original Scan<
+            img src={"data:image/jpeg;base64," + location.state.img} />
+          </div>
 
-
-          <div><img src={"data:image/jpeg;base64," + location.state.img} /></div>
-
-
-          {/* <p className="pt-6 text-xl font-bold">1860.00 €</p> */}
+          <div className="pl-6">Localized Scan
+            <img src={"data:image/jpeg;base64," + location.state.localized} /></div><br />
         </div>
+
+        <div className="flex justify-center ">
+          <div>
+              <img src={"data:image/jpeg;base64," + location.state.heatmap} />
+          </div>
+
+        </div>
+        {/* <div className="pt-6 flex justify-center ">
+
+
+          
+          <div className="pt-8">Localized Scan<img src={"data:image/jpeg;base64," + location.state.localized} /></div><br />
+
+
+
+
+
+        
+        </div> */}
+        
+        
         {/* <div className="pt-16 text-sm">
                     <p className="font-bold">PAYMENT ADVICE</p>
                     <p>Account name: MB Road apples</p>

@@ -1,0 +1,6 @@
+venv
+uploaded_images
+.env
+__pycache__
+flask_sessions
+Dockerfile

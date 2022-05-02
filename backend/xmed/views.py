@@ -5,6 +5,7 @@ from flask import request, flash, request, redirect, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
 import base64
+
 from . import app,UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
 
@@ -16,12 +17,18 @@ def initial():
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
     print("Requested files", request.files)
-    target = "./uploaded_images"
-    if not os.path.isdir(target):
-        os.mkdir(target)
+    original = "./uploaded_images/original"
+    hm="./uploaded_images/heatmaps"
+    localized='./uploaded_images/localized'
+    if not os.path.isdir(original):
+        os.mkdir(original)
+    if not os.path.isdir(hm):
+        os.mkdir(hm)
+    if not os.path.isdir(localized):
+        os.mkdir(localized)
     file = request.files['file']
     filename = secure_filename(file.filename)
-    destination = "/".join(["./uploaded_images", filename])
+    destination = "/".join(["./uploaded_images/original", filename])
     
 
     print(destination)
@@ -34,18 +41,26 @@ def fileUpload():
     with open(destination, "rb") as img_file:
         encoded_image = base64.b64encode(img_file.read())
    
-
-    result = helpers.predict(destination)
+    result = helpers.predict(destination, filename)
     print("RES =", result)
+    
+    CDN_URL= helpers.cdn_upload(destination,(180,180), filename)
+    heatmap_dest = "./uploaded_images/heatmaps/"+filename
+    with open(heatmap_dest, "rb") as heatmap_img_file:
+        encoded_heatmap_image = base64.b64encode(heatmap_img_file.read())
 
+    localized_dest = "./uploaded_images/localized/"+filename
+    with open(localized_dest, "rb") as localized_img_file:
+        encoded_localized_image = base64.b64encode(localized_img_file.read())
+    
     print("upload", session.get('email'))
     scan_id = prediction_collection.insert_one(
-        {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"], "timestamps": datetime.datetime.utcnow(), "image":encoded_image.decode("utf-8")})
+        {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"], "originalImage": encoded_image.decode("utf-8"), "heatmapImage": encoded_heatmap_image.decode("utf-8"), "localizedImage": encoded_localized_image.decode("utf-8"), "timestamps": datetime.datetime.utcnow()})
     print(session["id"]["$oid"])
     scan_id = helpers.parse_json(scan_id.inserted_id)
     print(scan_id['$oid'])
     print(type(scan_id['$oid']))
-    return jsonify(prediction=bool(result), name=session["name"], timestamps=str(datetime.datetime.utcnow()), userId=str(session["id"]["$oid"]),id=scan_id['$oid'], img=encoded_image.decode("utf-8"))
+    return jsonify(prediction=bool(result), name=session["name"], userId=str(session["id"]["$oid"]), id=scan_id['$oid'], img=encoded_image.decode("utf-8"), heatmap=encoded_heatmap_image.decode("utf-8"), localized=encoded_localized_image.decode("utf-8"), timestamps=str(datetime.datetime.utcnow()))
 
 @app.route('/login', methods=["POST"])
 def login():
@@ -85,6 +100,8 @@ def register():
     name = data["name"]
     email = data["email"]
     password = data["password"]
+    if not name or not email or not password:
+        return {"status": False, "message": "Enter Valid Values In All Fields"}
     if(user_collection.find_one({"email": email})):
         return {"status": False, "message": "USER WITH THIS EMAIL EXISTS"}
     else:

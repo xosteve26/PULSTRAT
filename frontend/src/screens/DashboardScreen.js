@@ -38,7 +38,7 @@ const DashboardScreen = () => {
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             
             <table className="w-full text-md text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+               {received && <thead className="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" className="px-6 py-3">
                             Scan ID
@@ -60,7 +60,7 @@ const DashboardScreen = () => {
                             <span className="sr-only">View</span>
                         </th>
                     </tr>
-                </thead>
+                </thead> }
                 <tbody>
                        
                     
@@ -82,7 +82,7 @@ const DashboardScreen = () => {
                                 {item.timestamps['$date']}
                             </td>
                             <td className="px-6 py-4 text-right">
-                                <button type='button' onClick={() => navigate('/report', { state: { prediction: item.result, name:item.name, id:item._id.$oid.toString(), timestamps:item.timestamps['$date'], userId:item.userId.$oid.toString(), img:item.image } })} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
+                                <button type='button' onClick={() => navigate('/report', { state: { prediction: item.result, name:item.name, id:item._id.$oid.toString(), timestamps:item.timestamps['$date'], userId:item.userId.$oid.toString(), img:item.originalImage, heatmap:item.heatmapImage, localized:item.localizedImage } })} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
                             </td>
                         </tr>
                     ))
