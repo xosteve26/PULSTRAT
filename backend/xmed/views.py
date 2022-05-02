@@ -100,6 +100,8 @@ def register():
     name = data["name"]
     email = data["email"]
     password = data["password"]
+    if not name or not email or not password:
+        return {"status": False, "message": "Enter Valid Values In All Fields"}
     if(user_collection.find_one({"email": email})):
         return {"status": False, "message": "USER WITH THIS EMAIL EXISTS"}
     else:
