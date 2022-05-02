@@ -82,7 +82,7 @@ const DashboardScreen = () => {
                                 {item.timestamps['$date']}
                             </td>
                             <td className="px-6 py-4 text-right">
-                                <button type='button' onClick={() => navigate('/report', { state: { prediction: item.result, name:item.name, id:item._id.$oid.toString(), timestamps:item.timestamps['$date'], userId:item.userId.$oid.toString(), img:item.image } })} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
+                                <button type='button' onClick={() => navigate('/report', { state: { prediction: item.result, name:item.name, id:item._id.$oid.toString(), timestamps:item.timestamps['$date'], userId:item.userId.$oid.toString(), img:item.originalImage, heatmap:item.heatmapImage, localized:item.localizedImage } })} class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
                             </td>
                         </tr>
                     ))
