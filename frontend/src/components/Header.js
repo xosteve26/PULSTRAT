@@ -21,7 +21,7 @@ const Header = () => {
                         <div className="container relative flex flex-wrap items-center justify-between h-24 mx-auto overflow-hidden font-medium border-b border-gray-200 md:overflow-visible lg:justify-center sm:px-4 md:px-2">
                             <div className="flex items-center justify-start w-1/4 h-full pr-4">
                                 <a href="#_" className=" relative z-10 flex items-center w-auto text-2xl font-extrabold leading-none text-black select-none">
-                                    <span className="p-1 text-xl font-black leading-none text-gray-900"><span className="text-yellow-400">.</span><span>PULSTRATE</span><span className="text-yellow-400">.</span></span>
+                                    <span className="p-1 text-xl font-black leading-none text-gray-900"><span className="text-yellow-400">.</span><span>PULSTRAT</span><span className="text-yellow-400">.</span></span>
                                 </a>
                             </div>
                             <div className="top-0 left-0 items-start hidden w-full h-full p-4 text-sm bg-gray-900 bg-opacity-50 md:items-center md:w-3/4 md:absolute lg:text-base md:bg-transparent md:p-0 md:relative md:flex">

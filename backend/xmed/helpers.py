@@ -18,10 +18,6 @@ from IPython.display import Image, display
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
-#CDN
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
 def cdn_upload(img_path,img_size,filename):
     model.layers[-1].activation = None

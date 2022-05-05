@@ -1,6 +1,6 @@
 venv
-uploaded_images
-.env
+flask_session
 __pycache__
-flask_sessions
-Dockerfile
+.env
+test.py
+uploaded_images

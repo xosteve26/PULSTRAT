@@ -1,0 +1,23 @@
+
+version: '3'
+services:
+  pulstrate-frontend:
+    container_name: pulstrate-frontend
+    build: 
+      context: ./frontend
+      args:
+        REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
+    ports:
+      - "3000:3000"
+
+  pulstrate-backend:
+    container_name: pulstrate-backend
+    build: 
+      context: ./backend
+      args:
+        MONGO_URI: ${MONGO_URI}
+        SECRET_KEY: ${SECREY_KEY}
+    ports:
+      - "5000:5000"
+
+    
