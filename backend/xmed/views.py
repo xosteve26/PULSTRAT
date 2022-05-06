@@ -1,5 +1,6 @@
 import os, json, bcrypt
 import datetime
+
 from bson import ObjectId
 from flask import request, flash, request, redirect, url_for, session, jsonify
 from werkzeug.utils import secure_filename
@@ -8,6 +9,12 @@ import base64
 
 from . import app,UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
+
+#SendGrid 
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import *
+message = Mail()
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -34,7 +41,6 @@ def fileUpload():
     print(destination)
     file.save(destination)
 
-    # session['uploadFilePath'] = destination
     response = {'filePath': destination}
 
     img = Image.open(file)
@@ -124,6 +130,47 @@ def get_scans():
         scans.append(helpers.parse_json(scan))
 
     return jsonify(scans=scans)
+
+@app.route('/email', methods=["POST"])
+def email():
+    
+    emailData=json.loads(request.data)
+    print(emailData)
+    print(type(emailData["prediction"]))
+    message.to=[
+        To(
+            email=emailData["userEmail"]
+        )
+    ]
+    message.from_email= From(
+        email="noreplyxzen@gmail.com"
+    )
+
+    message.subject = Subject("Your Scan Report"+", "+emailData["userName"])
+    message.template_id="d-1a3d62ced7a94aeba2ddbee2cac2fc35"
+    message.dynamic_template_data={
+        "user_name":emailData["userName"],
+        "user_email":emailData["userEmail"],
+        "scan_id":"#"+emailData["scanId"],
+        "prediction":emailData["prediction"],
+        "scan_date":emailData["scanTime"],
+        "current_date": str(datetime.datetime.utcnow())
+    }
+
+    sendgrid_client = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+
+
+
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
+    return {"status":True}
+
 
 @app.route('/logout',methods=["GET"])
 def logout():

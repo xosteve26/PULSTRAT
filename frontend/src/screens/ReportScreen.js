@@ -9,12 +9,11 @@ import { faBullseye } from "@fortawesome/free-solid-svg-icons";
 import logo from "../logo.png";
 import moment from "moment";
 
+
 import ReactToPrint from "react-to-print";
+import axios from "axios";
 
-// import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-// import ReactPDF from '@react-pdf/renderer';
 
-// import PDFFile from '../components/PDFFile.js';
 
 const ReportComponent = React.forwardRef((props, ref) => {
   const location = useLocation();
@@ -30,11 +29,7 @@ const ReportComponent = React.forwardRef((props, ref) => {
     <>
       <div className="h-[297mm] w-[210mm] p-12 pl-32" ref={ref}>
         <div className="flex justify-center border-2 border-yellow-400">
-          {/* <div>
-                        <p className="pb-2 text-4xl">{location.state.name}</p>
-                        <p className="text-sm text-gray-400">{userDataObject.email}</p>
-                        <p className="text-sm text-gray-400">{location.state.userId}</p>
-                    </div> */}
+          
           <div className="justify-center">
             <img src={logo} width="180px" height="180px" />
           </div>
@@ -112,26 +107,7 @@ const ReportComponent = React.forwardRef((props, ref) => {
           </div>
 
         </div>
-        {/* <div className="pt-6 flex justify-center ">
-
-
-          
-          <div className="pt-8">Localized Scan<img src={"data:image/jpeg;base64," + location.state.localized} /></div><br />
-
-
-
-
-
-        
-        </div> */}
-        
-        
-        {/* <div className="pt-16 text-sm">
-                    <p className="font-bold">PAYMENT ADVICE</p>
-                    <p>Account name: MB Road apples</p>
-                    <p>Bank name: Hello World</p>
-                    <p>IBAN: GB95BARC20038428989175</p>
-                </div> */}
+       
       </div>
     </>
   );
@@ -143,7 +119,27 @@ const ReportScreen = () => {
   let ud = window.sessionStorage.getItem("userData");
   const userDataObject = JSON.parse(ud);
   console.log(userDataObject);
-  console.log("location", location.state.prediction);
+  console.log("location", location);
+
+  const emailHandler = async() => {
+    const emailData={
+      "userName":location.state.name,
+      "userEmail":userDataObject.email,
+      "scanId":location.state.id,
+      "prediction": location.state.prediction,
+      "scanTime":location.state.timestamps,
+    }
+    const res = await axios.post("http://localhost:5000/email", emailData);
+    const data = await res.data;
+    console.log(data)
+    if (data.status){
+      alert("Email sent successfully")
+    }
+    else{
+      alert("Email not sent")
+    }
+
+  }
 
   return (
     <>
@@ -245,7 +241,7 @@ const ReportScreen = () => {
           </div>
         </div>
       </div>
-      
+  
       <ReactToPrint
         content={() => componentRef.current}
         documentTitle={location.state.name+"-"+location.state.id+"Scan"}
@@ -255,7 +251,13 @@ const ReportScreen = () => {
         </button></div>}
       />
       
+      <div className="h-[297mm] w-[210mm] p-2 pl-32">
+        <button onClick={emailHandler} className="ml-2 bg-yellow-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"><img className="fill-current w-6 h-6 mr-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAADGElEQVR4nO2cLW8VQRSGH9qkggCOJpAUhSsJKH5Fq6AGS4LiQ/IDQKAq+BBY/gACx4cHQwUWwUfAoHpbFKWL2Huh3LS7s3Nm9sze+z7JSSq203POOzPv3t25BSGEEEIIIYQQQgghhBBCiP9ZBu4DW8AuUCmoxr14D9wDTkd3t4UNYFRAsaXHNnAlssdHsgHsF1DcUGKfQBGOBVyzDHwEToYMKP4yAs4DP5ouWggY6DZqfgyngJttF4UIsGbPZW5Zb7sgZAvaAU7Yc5lLdqhXwpGErIBrwOck6cwX34HrqQY7DjwA9vC/wyg9fgNPyeSbl4B3BRRZamwBl6O7G8gCcIP6A4d3waXET+AusGjoa2fOAs8SFjHUeAGcM/bSxDrwCf9G9B3fqJ8QFME8mXRWk7Uy6ybdi8lO03WPm0WTjjHZM9QeaSY2gVkxaesENGNdgkM16RiTvQi8nRrHzHRiMSY0JJO21PfrkPHMNM2Qqx3HKt2kY1b4Gs0r3Exb0rNg0haTbRvbTK4CSjHp3BPITO4l7GXSqUy2KAEqyjfpvvMzY5lhpZl0DpMtVoBJlGDSOU22eAFiG5DKpL0ngJlUs7CiX5OONdnUW6CZlMlU5DfB0m4CzKROyDJD20y6xNtgM7kSm0SKPdrTZAcvQEV9jvIO3Rq4Ajwfx0qH31sc/62+Tnqb6SPJSeR+4+TxMNBMn8lW/DPRxiN9HfF8HG6m74QnkerUwTr10UqvOsx4JT6J2HM3pTxtNeNdQEW3u5zS3jeY8S7gYLSZdIlv3Mx4FzAdh5l0ye+cGwn5gkYSFTPwFbg1/vkR3T4L9Eljj4cswFBo7HHIN2RERiSAMxLAGQngjARwRgI4IwGckQDOSABnJIAzEsAZCeCMBHBGAjgjAZwJEWA3exazy6jtghABviRIZF5p7V2IAK8SJDKvvEwxyAXKfNldeuwBqxH9PpQnBRQ0tHgY1ekjWALeFFDUUOL1uGdJWQIeo+2oKfaoZ37y5h9kFdgEPlD/Y1Lvor1jZ9yLTRLu+UIIIYQQQgghhBBCCCGEmB3+AJUCj1SQZSlaAAAAAElFTkSuQmCC" />Email</button>
+      </div>
+          
+      
       <ReportComponent ref={componentRef} />
+      
      
     </>
   );
