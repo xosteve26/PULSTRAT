@@ -31,10 +31,7 @@ const DashboardScreen = () => {
         
         
         const dates = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
-<<<<<<< Updated upstream
-=======
         dates.reverse()
->>>>>>> Stashed changes
         setDates(dates)
         setReceived(true);
         console.log("dates", dates)
@@ -54,15 +51,24 @@ const DashboardScreen = () => {
             </h1>
             
             
-            {!received && <><div className="grid place-items-center h-screen"><ThreeBody
-                size={50}
-                speed={1.1}
-                color="black"
-                style="content-center"
-            /></div></>}
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <DashboardTable data={data} received={received} dates={dates} />
-        </div>
+            {!received ? 
+
+                <>
+                    <div className="grid place-items-center h-screen"><ThreeBody
+                        size={50}
+                        speed={1.1}
+                        color="black"
+                        style="content-center"
+                    /></div>
+                </> 
+                
+                : 
+
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <DashboardTable data={data} dates={dates} />
+                </div>
+            }
+        
 
     </>
     )
