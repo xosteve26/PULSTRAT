@@ -6,6 +6,7 @@ import SignInSCreen from './screens/SignInSCreen';
 import ReportScreen from './screens/ReportScreen';
 import UploadScreen from './screens/UploadScreen';
 import DashboardScreen from './screens/DashboardScreen';
+import AboutUsScreen from './screens/AboutUsScreen';
 
 const App = ()=> {
   return (
@@ -17,6 +18,7 @@ const App = ()=> {
         <Route path="/report/:id" element={<ReportScreen/>}/>
         <Route path="/upload" element={<UploadScreen/>}/>
         <Route path="/dashboard" element={<DashboardScreen />} />
+        <Route path="/about" element={<AboutUsScreen />} />
       </Routes>
       
     </Router>
