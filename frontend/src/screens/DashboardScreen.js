@@ -31,6 +31,10 @@ const DashboardScreen = () => {
         
         
         const dates = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
+<<<<<<< Updated upstream
+=======
+        dates.reverse()
+>>>>>>> Stashed changes
         setDates(dates)
         setReceived(true);
         console.log("dates", dates)
@@ -44,8 +48,8 @@ const DashboardScreen = () => {
         <Header />
            
             <h1 className="text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl pb-3">
-                <span className="block xl:inline">Scan</span>
-                <span className="block text-yellow-400 xl:inline"> History</span>
+                <span className="block xl:inline ">Scan</span>
+                <span className="block text-yellow-400 xl:inline "> History</span>
 
             </h1>
             
