@@ -14,7 +14,7 @@ const App = ()=> {
         <Route path="/" element={<HomeScreen/>} exact/>
         <Route path="/sign-up" element={<SignUpScreen/>}/>
         <Route path="/sign-in" element={<SignInSCreen/>}/>
-        <Route path="/report" element={<ReportScreen/>}/>
+        <Route path="/report/:id" element={<ReportScreen/>}/>
         <Route path="/upload" element={<UploadScreen/>}/>
         <Route path="/dashboard" element={<DashboardScreen />} />
       </Routes>

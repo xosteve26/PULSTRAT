@@ -8,12 +8,25 @@ import { LineWobble } from '@uiball/loaders'
 
 
 const UploadScreen = () => {
+    const navigate = useNavigate();
+    
+    
     const [file, setFile] = useState(null)
     const[fileName, setFileName] = useState('')
     const [prediction, setPrediction] = useState(null)
     const[loading,setLoading] = useState(false)
     const [error,setError] = useState(false)
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        const loggedIn = window.sessionStorage.getItem("LoggedIn")
+        console.log("LOGGED IN ", loggedIn);
+        if (!loggedIn || loggedIn === "false") {
+            console.log("IN IF")
+            alert("Please login to access this route")
+            navigate("/sign-in")
+        }
+
+    }, [navigate])
     console.log(file)
  
     const fileUploadHandler = (e) => {
