@@ -1,6 +1,6 @@
 # Pulstrat - A Pneumonia Detecting Platform
 
-> A Pneumonia Detecting Web Application Built Using The MERN Stack , Tailwind CSS 
+> A Pneumonia Detecting Web Application Built Using The MERN Stack , Tailwind CSS & SendGrid
 
 ## Features
 
@@ -8,6 +8,7 @@
  - Instant delivery of results
  - User Authentication 
  - Dashboard to display user's history of scans
+ - Send reports to registered email
 
 ## Environmental Variables
 
@@ -16,6 +17,7 @@ Create a .env file in then frontend & backend folder and add the following
 ```
 MONGO_URI = Your Mongo DB ATLAS URI [Mongo DB connection string]
 SECRET_KEY = Your Flask Secret Key
+SENDGRID_API_KEY = Your SendGrid API key [ For email functionality]
 ```
 
 ##### Frontend
@@ -40,7 +42,7 @@ pip install -r requirements.txt
 ```
 
 
-### Run
+## Run
 
 ```
 # Run frontend (:3000) 
