@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 import axios from 'axios'
 import { Ripples } from '@uiball/loaders'
 
@@ -74,6 +75,7 @@ const SignInSCreen = () => {
                 </div>
             </div>
         </section>
+        <Footer />
  
         </>
     )

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { LineWobble } from '@uiball/loaders'
@@ -23,7 +24,7 @@ const UploadScreen = () => {
         if (!loggedIn || loggedIn === "false") {
             console.log("IN IF")
             alert("Please login to access this route")
-            navigate("/sign-in")
+            return navigate("/sign-in")
         }
 
     }, [navigate])
@@ -62,7 +63,7 @@ const UploadScreen = () => {
 
             
 
-            navigate('/report', { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId, img:res.data.img, heatmap:res.data.heatmap, localized:res.data.localized } })
+            navigate(`/report/${res.data.id}`, { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId, img:res.data.img, heatmap:res.data.heatmap, localized:res.data.localized } })
         }
         
 
@@ -129,6 +130,7 @@ const UploadScreen = () => {
                 </div>
             </div>
         </section>
+        <Footer />
             
         </>
     )

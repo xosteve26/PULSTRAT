@@ -20,7 +20,7 @@ const Header = () => {
                     <nav className="relative z-50 h-24 select-none" x-data="{ showMenu: false }">
                         <div className="container relative flex flex-wrap items-center justify-between h-24 mx-auto overflow-hidden font-medium border-b border-gray-200 md:overflow-visible lg:justify-center sm:px-4 md:px-2">
                             <div className="flex items-center justify-start w-1/4 h-full pr-4">
-                                <a href="#_" className=" relative z-10 flex items-center w-auto text-2xl font-extrabold leading-none text-black select-none">
+                                <a href="/" className=" relative z-10 flex items-center w-auto text-2xl font-extrabold leading-none text-black select-none">
                                     <span className="p-1 text-xl font-black leading-none text-gray-900"><span className="text-yellow-400">.</span><span>PULSTRAT</span><span className="text-yellow-400">.</span></span>
                                 </a>
                             </div>

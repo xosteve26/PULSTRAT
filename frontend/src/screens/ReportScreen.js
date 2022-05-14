@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
 import base64 from 'base-64'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -254,11 +255,11 @@ const ReportScreen = () => {
       <div className="h-[297mm] w-[210mm] p-2 pl-32">
         <button onClick={emailHandler} className="ml-2 bg-yellow-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"><img className="fill-current w-6 h-6 mr-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAADGElEQVR4nO2cLW8VQRSGH9qkggCOJpAUhSsJKH5Fq6AGS4LiQ/IDQKAq+BBY/gACx4cHQwUWwUfAoHpbFKWL2Huh3LS7s3Nm9sze+z7JSSq203POOzPv3t25BSGEEEIIIYQQQgghhBBCiP9ZBu4DW8AuUCmoxr14D9wDTkd3t4UNYFRAsaXHNnAlssdHsgHsF1DcUGKfQBGOBVyzDHwEToYMKP4yAs4DP5ouWggY6DZqfgyngJttF4UIsGbPZW5Zb7sgZAvaAU7Yc5lLdqhXwpGErIBrwOck6cwX34HrqQY7DjwA9vC/wyg9fgNPyeSbl4B3BRRZamwBl6O7G8gCcIP6A4d3waXET+AusGjoa2fOAs8SFjHUeAGcM/bSxDrwCf9G9B3fqJ8QFME8mXRWk7Uy6ybdi8lO03WPm0WTjjHZM9QeaSY2gVkxaesENGNdgkM16RiTvQi8nRrHzHRiMSY0JJO21PfrkPHMNM2Qqx3HKt2kY1b4Gs0r3Exb0rNg0haTbRvbTK4CSjHp3BPITO4l7GXSqUy2KAEqyjfpvvMzY5lhpZl0DpMtVoBJlGDSOU22eAFiG5DKpL0ngJlUs7CiX5OONdnUW6CZlMlU5DfB0m4CzKROyDJD20y6xNtgM7kSm0SKPdrTZAcvQEV9jvIO3Rq4Ajwfx0qH31sc/62+Tnqb6SPJSeR+4+TxMNBMn8lW/DPRxiN9HfF8HG6m74QnkerUwTr10UqvOsx4JT6J2HM3pTxtNeNdQEW3u5zS3jeY8S7gYLSZdIlv3Mx4FzAdh5l0ye+cGwn5gkYSFTPwFbg1/vkR3T4L9Eljj4cswFBo7HHIN2RERiSAMxLAGQngjARwRgI4IwGckQDOSABnJIAzEsAZCeCMBHBGAjgjAZwJEWA3exazy6jtghABviRIZF5p7V2IAK8SJDKvvEwxyAXKfNldeuwBqxH9PpQnBRQ0tHgY1ekjWALeFFDUUOL1uGdJWQIeo+2oKfaoZ37y5h9kFdgEPlD/Y1Lvor1jZ9yLTRLu+UIIIYQQQgghhBBCCCGEmB3+AJUCj1SQZSlaAAAAAElFTkSuQmCC" />Email</button>
       </div>
-          
+         
       
       <ReportComponent ref={componentRef} />
       
-     
+      <Footer /> 
     </>
   );
 };
