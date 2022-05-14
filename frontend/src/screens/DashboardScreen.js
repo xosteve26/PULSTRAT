@@ -33,19 +33,21 @@ const DashboardScreen = () => {
             "originalNumberOfScans":originalNumberOfScans,
             "currentNumberOfScans":currentNumberOfScans
         }
-        const res = await axios.post(process.env.REACT_APP_BASE_URL+'/scans', numberData,{ withCredentials: true });
-        setData(res.data.scans);
-        window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
-        console.log("data",res.data)
-        
-        
+        if(!received){
+            const res = await axios.post(process.env.REACT_APP_BASE_URL + '/scans', numberData, { withCredentials: true });
+            setData(res.data.scans);
+            window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
+            console.log("data", res.data)
+            setReceived(true);
+            
+            console.log("dates", dates)
+
+            console.log(res.data.scans);
+        }
         const dates = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
         dates.reverse()
         setDates(dates)
-        setReceived(true);
-        console.log("dates", dates)
-        
-        console.log(res.data.scans);
+        console.log(dates,data)
     },[received, navigate]);
 
     
