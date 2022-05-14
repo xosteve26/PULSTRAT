@@ -10,6 +10,7 @@ const DashboardTable = (props) => {
       <>
               {dates && dates.map(date => {
                   const filtered = data.filter(x => x.timestamps["$date"].slice(0, 10) === date)
+                  filtered.reverse()
                   console.log("FILTERED", filtered)
                   return (
                       <>
@@ -24,7 +25,7 @@ const DashboardTable = (props) => {
                                           Scan ID
                                       </th>
                                       <th scope="col" className="px-6 py-3">
-                                          Name
+                                          File Name
                                       </th>
                                       <th scope="col" className="px-6 py-3">
                                           Diagnosis
@@ -49,7 +50,7 @@ const DashboardTable = (props) => {
                                           {item._id.$oid.toString()}
                                       </td>
                                       <td scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                          {item.name}
+                                          {item.fileName ? item.fileName : "N/A"}
                                       </td>
                                       <td className="px-6 py-4">
                                           {item.result == false ? <span className="text-red-600">Negative</span> : <span className="text-green-600">Positive</span>}
@@ -58,7 +59,7 @@ const DashboardTable = (props) => {
                                           PNEUMONIA
                                       </td>
                                       <td className="px-6 py-4">
-                                          {item.timestamps['$date']}
+                                          {moment(item.timestamps['$date']).format("MMMM Do YYYY, h:mm:ss a")}
                                       </td>
                                       <td className="px-6 py-4 text-right">
                                           <button type='button' onClick={() => navigate('/report/' +  item._id.$oid.toString() , { state: { prediction: item.result, name: item.name, id: item._id.$oid.toString(), timestamps: item.timestamps['$date'], userId: item.userId.$oid.toString(), img: item.originalImage, heatmap: item.heatmapImage, localized: item.localizedImage } })} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
