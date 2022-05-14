@@ -60,6 +60,8 @@ const UploadScreen = () => {
             console.log("RES",res)
             setPrediction(res.data.prediction)
             setLoading(false)
+            const numberOfScans=window.sessionStorage.getItem('numberOfScans')
+            window.sessionStorage.setItem('numberOfScans',parseInt(numberOfScans)+1)
 
             
 

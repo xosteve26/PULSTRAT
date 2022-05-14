@@ -9,11 +9,15 @@ import { ThreeBody } from '@uiball/loaders'
 import DashboardTable from '../components/DashboardTable'
 
 const DashboardScreen = () => {
+    
     const navigate = useNavigate();
     
     const [data, setData] = useState([]);
     const [received, setReceived] = useState(false);
     const [dates, setDates] = useState(null);
+
+    const originalNumberOfScans=window.sessionStorage.getItem("originalNumberOfScans");
+    const currentNumberOfScans=window.sessionStorage.getItem("numberOfScans");
     
     console.log(data)
     
@@ -25,9 +29,13 @@ const DashboardScreen = () => {
             alert("Please login to access this route")
             return navigate("/sign-in")
         }
-
-        const res = await axios.get(process.env.REACT_APP_BASE_URL+'/scans', { withCredentials: true });
+        const numberData={
+            "originalNumberOfScans":originalNumberOfScans,
+            "currentNumberOfScans":currentNumberOfScans
+        }
+        const res = await axios.post(process.env.REACT_APP_BASE_URL+'/scans', numberData,{ withCredentials: true });
         setData(res.data.scans);
+        window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
         console.log("data",res.data)
         
         

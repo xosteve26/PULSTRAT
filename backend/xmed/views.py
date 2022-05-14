@@ -16,10 +16,20 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import *
 message = Mail()
 
+# r = redis.Redis(host='localhost', port=6379, db=0)
+# r.set('foo','bar')
+# print(r.get('foo'))
+
 
 @app.route('/', methods=["GET", "POST"])
 def initial():
-    return "WELCOME"
+    data=json.loads(request.data)
+    id=data['id']
+    print("data",data['id'])
+    numberOfScans = prediction_collection.count_documents(
+        {"userId": ObjectId(id)})
+
+    return jsonify(nScan=numberOfScans)
 
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
@@ -120,16 +130,47 @@ def register():
         })
         return {"status": True}
 
-@app.route('/scans', methods=["GET"])
+@app.route('/scans', methods=["GET", "POST"])
 def get_scans():
-    print(session)
-    scans = []
-    scansObj = prediction_collection.find({"userId": ObjectId(session["id"]["$oid"])})
 
-    for scan in scansObj:
-        scans.append(helpers.parse_json(scan))
+    data=json.loads(request.data)
+    originalNumberOfScans=data["originalNumberOfScans"]
+    currentNumberOfScans=data["currentNumberOfScans"]
+    print(originalNumberOfScans,currentNumberOfScans)
 
-    return jsonify(scans=scans)
+    # Cache System Logic
+    if (originalNumberOfScans and currentNumberOfScans and originalNumberOfScans == currentNumberOfScans):
+        if('scans' in session):
+            print("CACHED")
+            return jsonify(scans=session['scans'])
+        else:
+            scans = []
+            scansObj = prediction_collection.find(
+                {"userId": ObjectId(session["id"]["$oid"])})
+            # print(scansObj)
+            for scan in scansObj:
+                scans.append(helpers.parse_json(scan))
+            session['scans']=scans
+
+
+            # r.set('cache?'+session["id"]["$oid"], dumps(scans))
+
+            return jsonify(scans=scans)
+    else:
+        scans = []
+        scansObj = prediction_collection.find(
+            {"userId": ObjectId(session["id"]["$oid"])})
+        # print(scansObj)
+        for scan in scansObj:
+            scans.append(helpers.parse_json(scan))
+        session['scans'] = scans
+
+        return jsonify(scans=scans)
+
+
+    
+
+    
 
 @app.route('/email', methods=["POST"])
 def email():
