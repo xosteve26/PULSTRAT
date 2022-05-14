@@ -24,15 +24,15 @@ def initial():
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
     print("Requested files", request.files)
-    original = "./uploaded_images/original"
-    hm="./uploaded_images/heatmaps"
-    localized='./uploaded_images/localized'
-    if not os.path.isdir(original):
-        os.mkdir(original)
-    if not os.path.isdir(hm):
-        os.mkdir(hm)
-    if not os.path.isdir(localized):
-        os.mkdir(localized)
+    original = "uploaded_images/original"
+    hm="uploaded_images/heatmaps"
+    localized='uploaded_images/localized'
+    if not os.path.exists(original):
+        os.makedirs(original)
+    if not os.path.exists(hm):
+        os.makedirs(hm)
+    if not os.path.exists(localized):
+        os.makedirs(localized)
     file = request.files['file']
     filename = secure_filename(file.filename)
     destination = "/".join(["./uploaded_images/original", filename])
@@ -61,7 +61,7 @@ def fileUpload():
     
     print("upload", session.get('email'))
     scan_id = prediction_collection.insert_one(
-        {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"], "originalImage": encoded_image.decode("utf-8"), "heatmapImage": encoded_heatmap_image.decode("utf-8"), "localizedImage": encoded_localized_image.decode("utf-8"), "timestamps": datetime.datetime.utcnow()})
+        {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"],"fileName":filename, "originalImage": encoded_image.decode("utf-8"), "heatmapImage": encoded_heatmap_image.decode("utf-8"), "localizedImage": encoded_localized_image.decode("utf-8"), "timestamps": datetime.datetime.utcnow()})
     print(session["id"]["$oid"])
     scan_id = helpers.parse_json(scan_id.inserted_id)
     print(scan_id['$oid'])
