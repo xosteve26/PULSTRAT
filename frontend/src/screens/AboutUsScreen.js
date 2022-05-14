@@ -1,5 +1,6 @@
 import React from 'react'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const AboutUsScreen = () => {
   return (
@@ -35,8 +36,9 @@ const AboutUsScreen = () => {
         </div>
         </section>
       <h1 className="text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl ">
+        <span className="block text-yellow-400 xl:inline">Meet </span>
         <span className="block xl:inline ">The</span>
-        <span className="block text-yellow-400 xl:inline "> Team</span>
+        <span className="block text-yellow-400 xl:inline"> Team</span>
       </h1>
       <section className="w-full py-12 bg-white lg:py-22">
         <div className="max-w-6xl px-12 mx-auto text-center">
@@ -102,6 +104,7 @@ const AboutUsScreen = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   )
 }

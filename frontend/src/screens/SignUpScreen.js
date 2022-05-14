@@ -1,5 +1,6 @@
 import React from 'react'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
@@ -91,6 +92,7 @@ const SignUpScreen = () => {
                 </div>
                 
             </section>
+            <Footer />
             
         </>
     )
