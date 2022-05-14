@@ -1,5 +1,6 @@
 import React from 'react'
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -22,7 +23,7 @@ const DashboardScreen = () => {
         if (!loggedIn || loggedIn === "false") {
             console.log("IN IF")
             alert("Please login to access this route")
-            navigate("/sign-in")
+            return navigate("/sign-in")
         }
 
         const res = await axios.get(process.env.REACT_APP_BASE_URL+'/scans', { withCredentials: true });
@@ -69,7 +70,7 @@ const DashboardScreen = () => {
                 </div>
             }
         
-
+        <Footer />
     </>
     )
 }
