@@ -129,7 +129,14 @@ def get_scans():
     for scan in scansObj:
         scans.append(helpers.parse_json(scan))
 
+
     return jsonify(scans=scans)
+
+@app.route('/report/<string:id>', methods=["GET"])
+def report(id):
+    reportFile=helpers.parse_json(prediction_collection.find_one({"_id":ObjectId(id)}))
+    return jsonify(report=reportFile)
+
 
 @app.route('/email', methods=["POST"])
 def email():
