@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 
 const SignUpScreen = () => {
@@ -14,7 +14,6 @@ const SignUpScreen = () => {
     const submitHandler = async (e) => {
         e.preventDefault()
         const baseURL = process.env.REACT_APP_BASE_URL
-        const data = JSON.stringify({ email, password, name })
         const res = await axios.post(`${baseURL}/register`, { email, password, name })
         console.log(res.data.status)
         if (res.data.status) {
