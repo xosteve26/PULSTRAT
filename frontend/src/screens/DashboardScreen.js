@@ -9,11 +9,15 @@ import { ThreeBody } from '@uiball/loaders'
 import DashboardTable from '../components/DashboardTable'
 
 const DashboardScreen = () => {
+    
     const navigate = useNavigate();
     
     const [data, setData] = useState([]);
     const [received, setReceived] = useState(false);
     const [dates, setDates] = useState(null);
+
+    const originalNumberOfScans=window.sessionStorage.getItem("originalNumberOfScans");
+    const currentNumberOfScans=window.sessionStorage.getItem("numberOfScans");
     
     console.log(data)
     
@@ -25,19 +29,25 @@ const DashboardScreen = () => {
             alert("Please login to access this route")
             return navigate("/sign-in")
         }
+        const numberData={
+            "originalNumberOfScans":originalNumberOfScans,
+            "currentNumberOfScans":currentNumberOfScans
+        }
+        if(!received){
+            const res = await axios.post(process.env.REACT_APP_BASE_URL + '/scans', numberData, { withCredentials: true });
+            setData(res.data.scans);
+            window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
+            console.log("data", res.data)
+            setReceived(true);
+            
+            console.log("dates", dates)
 
-        const res = await axios.get(process.env.REACT_APP_BASE_URL+'/scans', { withCredentials: true });
-        setData(res.data.scans);
-        console.log("data",res.data)
-        
-        
+            console.log(res.data.scans);
+        }
         const dates = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
         dates.reverse()
         setDates(dates)
-        setReceived(true);
-        console.log("dates", dates)
-        
-        console.log(res.data.scans);
+        console.log(dates,data)
     },[received, navigate]);
 
     

@@ -14,7 +14,6 @@ const UploadScreen = () => {
     
     const [file, setFile] = useState(null)
     const[fileName, setFileName] = useState('')
-    const [prediction, setPrediction] = useState(null)
     const[loading,setLoading] = useState(false)
     const [error,setError] = useState(false)
 
@@ -58,8 +57,9 @@ const UploadScreen = () => {
             data.append('filename', fileName)
             const res = await axios.post(`${baseURL}/upload`, data, headers)
             console.log("RES",res)
-            setPrediction(res.data.prediction)
             setLoading(false)
+            const numberOfScans=window.sessionStorage.getItem('numberOfScans')
+            window.sessionStorage.setItem('numberOfScans',parseInt(numberOfScans)+1)
 
             
 
