@@ -130,7 +130,7 @@ const ReportScreen = () => {
 
   useEffect(async () => {
     
-    const loggedIn = window.sessionStorage.getItem("LoggedIn")
+    const loggedIn = localStorage.getItem("LoggedIn")
     console.log("LOGGED IN ", loggedIn);
     if (!loggedIn || loggedIn === "false") {
       console.log("IN IF")

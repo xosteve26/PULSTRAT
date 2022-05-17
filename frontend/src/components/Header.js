@@ -7,6 +7,7 @@ const Header = () => {
 
     const logoutHandler = async() =>{
         window.sessionStorage.clear()
+        localStorage.clear()
         const res=await axios.get(process.env.REACT_APP_BASE_URL+'/logout',{withCredentials:true})
         if (res.data.status){
             window.location.href = '/'

@@ -22,6 +22,7 @@ const SignInSCreen = () => {
         if(res.data.status){
             window.sessionStorage.setItem('LoggedIn', true)
             window.sessionStorage.setItem("userData", res.data.userData)
+            localStorage.setItem('LoggedIn', true)
             window.location.href = '/'
             
         }
