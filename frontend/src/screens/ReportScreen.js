@@ -20,7 +20,7 @@ import axios from "axios";
 
 const ReportComponent = React.forwardRef((props, ref) => {
   const location = useLocation();
-  let ud = window.sessionStorage.getItem("userData");
+  let ud = window.localStorage.getItem("userData");
   const userDataObject = JSON.parse(ud);
 
 
@@ -120,8 +120,7 @@ const ReportScreen = () => {
   const componentRef = React.useRef();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  let ud = window.sessionStorage.getItem("userData");
+  const ud=window.localStorage.getItem("userData");
   const userDataObject = JSON.parse(ud);
   
   const[ready, setReady]=useState(false)
