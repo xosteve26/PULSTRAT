@@ -113,7 +113,7 @@ const UploadScreen = () => {
                             <label>Chosen files</label>
                             <input type="text" name="email" className="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder={fileName} />
                             <div className="block">
-                                        <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">{!loading == true ? 'Upload' : 
+                                        <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">{!loading === true ? 'Upload' : 
                                             <LineWobble
                                                 className='block'
                                                 size={315}

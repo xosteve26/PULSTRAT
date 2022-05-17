@@ -3,7 +3,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import base64 from 'base-64'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLungsVirus } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -125,7 +124,6 @@ const ReportScreen = () => {
   let ud = window.sessionStorage.getItem("userData");
   const userDataObject = JSON.parse(ud);
   
-  const [reportFile, setReportFile] = useState(null)
   const[ready, setReady]=useState(false)
   const params = useParams();
   const id = params.id;
@@ -141,9 +139,8 @@ const ReportScreen = () => {
     }
 
     if(!ready){
-      const res = await axios.get(`http://localhost:5000/report/${id}`)
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/report/${id}`)
       console.log(res.data.report)
-      setReportFile(res.data.report)
       location.state = res.data.report
       setReady(true)
     }
@@ -159,7 +156,7 @@ const ReportScreen = () => {
       "prediction": location.state.prediction,
       "scanTime":location.state.timestamps,
     }
-    const res = await axios.post("http://localhost:5000/email", emailData);
+    const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/email`, emailData);
     const data = await res.data;
     console.log(data)
     if (data.status){

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import axios from 'axios'
@@ -17,7 +17,6 @@ const SignInSCreen = () => {
         setLoading(true)
         const baseURL = process.env.REACT_APP_BASE_URL
         console.log("ENV VAR",baseURL)
-        const data=JSON.stringify({email,password})
         const res = await axios.post(`${baseURL}/login`, {email,password}, {withCredentials:true})
         console.log(res.data.status)
         if(res.data.status){
