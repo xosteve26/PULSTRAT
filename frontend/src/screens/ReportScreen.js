@@ -10,6 +10,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faBullseye } from "@fortawesome/free-solid-svg-icons";
 import logo from "../logo.png";
 import { ThreeBody } from '@uiball/loaders'
+import { useNavigate } from 'react-router-dom'
 import moment from "moment";
 
 
@@ -118,6 +119,7 @@ const ReportComponent = React.forwardRef((props, ref) => {
 
 const ReportScreen = () => {
   const componentRef = React.useRef();
+  const navigate = useNavigate();
   const location = useLocation();
   
   let ud = window.sessionStorage.getItem("userData");
@@ -129,6 +131,15 @@ const ReportScreen = () => {
   const id = params.id;
 
   useEffect(async () => {
+    
+    const loggedIn = window.sessionStorage.getItem("LoggedIn")
+    console.log("LOGGED IN ", loggedIn);
+    if (!loggedIn || loggedIn === "false") {
+      console.log("IN IF")
+      alert("Please login to access this route")
+      return navigate("/sign-in")
+    }
+
     if(!ready){
       const res = await axios.get(`http://localhost:5000/report/${id}`)
       console.log(res.data.report)
