@@ -137,12 +137,24 @@ const ReportScreen = () => {
       return navigate("/sign-in")
     }
 
-    if(!ready){
-      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/report/${id}`)
-      console.log(res.data.report)
-      location.state = res.data.report
-      setReady(true)
+    if(!window.sessionStorage.getItem(id)){
+      if (!ready) {
+        console.log("FETCH REPORT")
+        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/report/${id}`)
+        window.sessionStorage.setItem(res.data.report["_id"]["$oid"], JSON.stringify(res.data.report))
+        console.log(res.data.report)
+        location.state = res.data.report
+        setReady(true)
+      }
+    }else{
+      if(!ready){
+        console.log("IN ELSE CACHE REPORT")
+        location.state = JSON.parse(window.sessionStorage.getItem(id))
+        setReady(true)
+      }
+      
     }
+    
     
   }, [location,ready])
 
