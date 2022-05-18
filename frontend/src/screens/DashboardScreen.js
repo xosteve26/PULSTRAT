@@ -1,6 +1,8 @@
 import React from 'react'
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Pagination from '../components/Pagination';
+import { useParams } from "react-router-dom";
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -11,10 +13,12 @@ import DashboardTable from '../components/DashboardTable'
 const DashboardScreen = () => {
     
     const navigate = useNavigate();
-    
+    const params = useParams();
     const [data, setData] = useState([]);
     const [received, setReceived] = useState(false);
     const [dates, setDates] = useState(null);
+    const [pageN, setPageN] = useState(1);
+    const [totalPages, setTotalPages] = useState(null);
 
     const originalNumberOfScans=window.sessionStorage.getItem("originalNumberOfScans");
     const currentNumberOfScans=window.sessionStorage.getItem("numberOfScans");
@@ -29,26 +33,41 @@ const DashboardScreen = () => {
             alert("Please login to access this route")
             return navigate("/sign-in")
         }
+        
+        const pageNumber = params.pageNumber || 1;
+        setPageN(pageNumber);
+        console.log("PAGE NUMB", pageN)
         const numberData={
             "originalNumberOfScans":originalNumberOfScans,
             "currentNumberOfScans":currentNumberOfScans
         }
         if(!received){
-            const res = await axios.post(process.env.REACT_APP_BASE_URL + '/scans', numberData, { withCredentials: true });
+            const res = await axios.post(process.env.REACT_APP_BASE_URL + '/scans/'+parseInt(pageNumber), numberData, { withCredentials: true });
             setData(res.data.scans);
+            console.log("DATA",res.data)
+            setTotalPages(res.data.totalPages)
+            console.log("TOTAL PAGES",totalPages)
             window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
             console.log("data", res.data)
-            setReceived(true);
             
-            console.log("dates", dates)
+            
+            setReceived(true);
+            console.log("RECEIVED",received)
+            // console.log("dates", dateOrder)
 
             console.log(res.data.scans);
         }
-        const dates = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
-        dates.reverse()
-        setDates(dates)
-        console.log(dates,data)
-    },[received, navigate]);
+        const dateOrder = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
+        setDates(dateOrder)
+
+        console.log(dateOrder)
+
+
+        console.log(received)
+        console.log("dates, data",dates,data)
+        console.log("DATES",dates)
+        console.log("PAGES", totalPages)
+    },[received,navigate]);
 
     
     return(
@@ -62,7 +81,7 @@ const DashboardScreen = () => {
             </h1>
             
             
-            {!received ? 
+            {!received && !dates ? 
 
                 <>
                     <div className="grid place-items-center h-screen"><ThreeBody
@@ -76,10 +95,10 @@ const DashboardScreen = () => {
                 : 
 
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <DashboardTable data={data} dates={dates} />
+                    <DashboardTable data={data} dates={dates}/>
                 </div>
             }
-        
+            <Pagination totalPages={totalPages} currentPage={pageN}/>
         <Footer />
     </>
     )
