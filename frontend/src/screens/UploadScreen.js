@@ -61,13 +61,9 @@ const UploadScreen = () => {
             const numberOfScans=window.sessionStorage.getItem('numberOfScans')
             window.sessionStorage.setItem('numberOfScans',parseInt(numberOfScans)+1)
 
-            
-
-            navigate(`/report/${res.data.id}`, { state: { prediction: res.data.prediction, name:res.data.name, timestamps:res.data.timestamps, id:res.data.id, userId:res.data.userId, img:res.data.img, heatmap:res.data.heatmap, localized:res.data.localized } })
+            navigate(`/report/${res.data.id}`)
         }
-        
 
-       
     } 
    
     return (
