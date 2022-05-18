@@ -96,7 +96,7 @@ def login():
         session["name"] = findUser["name"]
         session["id"] = helpers.parse_json(id)
 
-        print("LOGIN SESSION", session)
+        
         print(id)
         print("It Matches!")
         return {"status":True, "userData":json.dumps({"id":helpers.parse_json(id),"name":findUser["name"], "email":findUser["email"]})}
@@ -130,9 +130,10 @@ def register():
         })
         return {"status": True}
 
-@app.route('/scans', methods=["GET", "POST"])
-def get_scans():
-
+@app.route('/scans/<int:id>', methods=["GET", "POST"])
+def get_scans(id):
+    pageSize=10
+    pageNumber=int(id) if id else 1
     data=json.loads(request.data)
     originalNumberOfScans=data["originalNumberOfScans"]
     currentNumberOfScans=data["currentNumberOfScans"]
@@ -140,17 +141,19 @@ def get_scans():
 
     # Cache System Logic
     if (originalNumberOfScans and currentNumberOfScans and originalNumberOfScans == currentNumberOfScans):
-        if('scans' in session):
+        if('scans'+str(pageNumber) in session):
             print("CACHED")
-            return jsonify(scans=session['scans'])
+            print(len(session['scans'+str(pageNumber)]))
+            return jsonify(scans=session['scans'+str(pageNumber)])
         else:
             scans = []
             scansObj = prediction_collection.find(
-                {"userId": ObjectId(session["id"]["$oid"])})
+                {"userId": ObjectId(session["id"]["$oid"])}).limit(pageSize).skip(pageSize*(pageNumber-1))
             # print(scansObj)
             for scan in scansObj:
                 scans.append(helpers.parse_json(scan))
-            session['scans']=scans
+            session['scans'+str(pageNumber)]=scans
+            print(len(scans))
 
 
             # r.set('cache?'+session["id"]["$oid"], dumps(scans))
@@ -159,12 +162,12 @@ def get_scans():
     else:
         scans = []
         scansObj = prediction_collection.find(
-            {"userId": ObjectId(session["id"]["$oid"])})
+            {"userId": ObjectId(session["id"]["$oid"])}).limit(pageSize).skip(pageSize*(pageNumber-1))
         # print(scansObj)
         for scan in scansObj:
             scans.append(helpers.parse_json(scan))
-        session['scans'] = scans
-
+        session['scans'+str(pageNumber)] = scans
+        print(len(scans))
         return jsonify(scans=scans)
 
 
