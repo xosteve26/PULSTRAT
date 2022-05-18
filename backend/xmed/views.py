@@ -6,7 +6,7 @@ from flask import request, flash, request, redirect, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
 import base64
-
+import math
 from . import app,UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
 
@@ -143,32 +143,36 @@ def get_scans(id):
     if (originalNumberOfScans and currentNumberOfScans and originalNumberOfScans == currentNumberOfScans):
         if('scans'+str(pageNumber) in session):
             print("CACHED")
-            print(len(session['scans'+str(pageNumber)]))
-            return jsonify(scans=session['scans'+str(pageNumber)])
+            print(len(session['scans'+str(pageNumber)][0]))
+            return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
         else:
             scans = []
+            totalDocuments = prediction_collection.count_documents(
+                {"userId": ObjectId(session["id"]["$oid"])})
             scansObj = prediction_collection.find(
-                {"userId": ObjectId(session["id"]["$oid"])}).limit(pageSize).skip(pageSize*(pageNumber-1))
+                {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps",-1).limit(pageSize).skip(pageSize*(pageNumber-1))
             # print(scansObj)
             for scan in scansObj:
                 scans.append(helpers.parse_json(scan))
-            session['scans'+str(pageNumber)]=scans
+            session['scans'+str(pageNumber)]=[scans, totalDocuments]
             print(len(scans))
 
 
             # r.set('cache?'+session["id"]["$oid"], dumps(scans))
 
-            return jsonify(scans=scans)
+            return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
     else:
         scans = []
+        totalDocuments = prediction_collection.count(
+            {"userId": ObjectId(session["id"]["$oid"])})
         scansObj = prediction_collection.find(
             {"userId": ObjectId(session["id"]["$oid"])}).limit(pageSize).skip(pageSize*(pageNumber-1))
         # print(scansObj)
         for scan in scansObj:
             scans.append(helpers.parse_json(scan))
-        session['scans'+str(pageNumber)] = scans
+        session['scans'+str(pageNumber)] = [scans, totalDocuments]
         print(len(scans))
-        return jsonify(scans=scans)
+        return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
 
 
 
