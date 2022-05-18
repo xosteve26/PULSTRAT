@@ -76,7 +76,7 @@ def fileUpload():
     scan_id = helpers.parse_json(scan_id.inserted_id)
     print(scan_id['$oid'])
     print(type(scan_id['$oid']))
-    return jsonify(prediction=bool(result), name=session["name"], userId=str(session["id"]["$oid"]), id=scan_id['$oid'], img=encoded_image.decode("utf-8"), heatmap=encoded_heatmap_image.decode("utf-8"), localized=encoded_localized_image.decode("utf-8"), timestamps=str(datetime.datetime.utcnow()))
+    return jsonify(id=scan_id['$oid'])
 
 @app.route('/login', methods=["POST"])
 def login():
