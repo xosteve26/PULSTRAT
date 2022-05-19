@@ -6,8 +6,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const HomeScreen = () => {
-    const userExists=window.sessionStorage.getItem('LoggedIn');
-    const userData=JSON.parse(window.sessionStorage.getItem('userData'));
+    const userExists=window.localStorage.getItem('LoggedIn');
+    const userData=JSON.parse(window.localStorage.getItem('userData'));
     
 
     useEffect(async() => {

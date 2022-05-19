@@ -18,7 +18,7 @@ const UploadScreen = () => {
     const [error,setError] = useState(false)
 
     useEffect(() => {
-        const loggedIn = window.sessionStorage.getItem("LoggedIn")
+        const loggedIn = window.localStorage.getItem("LoggedIn")
         console.log("LOGGED IN ", loggedIn);
         if (!loggedIn || loggedIn === "false") {
             console.log("IN IF")

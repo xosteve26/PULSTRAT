@@ -20,15 +20,13 @@ const SignInSCreen = () => {
         const res = await axios.post(`${baseURL}/login`, {email,password}, {withCredentials:true})
         console.log(res.data.status)
         if(res.data.status){
-            window.sessionStorage.setItem('LoggedIn', true)
-            window.sessionStorage.setItem("userData", res.data.userData)
-            localStorage.setItem('LoggedIn', true)
-            localStorage.setItem("userData", res.data.userData)
+            window.localStorage.setItem('LoggedIn', true)
+            window.localStorage.setItem("userData", res.data.userData)
             window.location.href = '/'
             
         }
         else{
-            window.sessionStorage.setItem('LoggedIn', false)
+            window.localStorage.setItem('LoggedIn', false)
             setError(true)
             setLoading(false)
         }
