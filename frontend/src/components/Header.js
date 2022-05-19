@@ -2,12 +2,12 @@ import React from 'react'
 import axios from 'axios'
 
 const Header = () => {
-    const userExists=window.sessionStorage.getItem('LoggedIn')
+    const userExists=window.localStorage.getItem('LoggedIn')
     console.log(typeof(userExists))
 
     const logoutHandler = async() =>{
         window.sessionStorage.clear()
-        localStorage.clear()
+        window.localStorage.clear()
         const res=await axios.get(process.env.REACT_APP_BASE_URL+'/logout',{withCredentials:true})
         if (res.data.status){
             window.location.href = '/'

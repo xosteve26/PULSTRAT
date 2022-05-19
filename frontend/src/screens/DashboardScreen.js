@@ -22,7 +22,7 @@ const DashboardScreen = () => {
     console.log(data)
     
     useEffect(async() => {
-        const loggedIn = window.sessionStorage.getItem("LoggedIn")
+        const loggedIn = window.localStorage.getItem("LoggedIn")
         console.log("LOGGED IN ", loggedIn);
         if (!loggedIn || loggedIn === "false") {
             console.log("IN IF")
