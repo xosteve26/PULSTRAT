@@ -64,7 +64,7 @@ const Header = () => {
                                     <div className="flex flex-col items-start justify-end w-full pt-4 md:items-center md:w-1/3 md:flex-row md:py-0">
                                         {userExists == 'true' ? <> 
                                         <button onClick={logoutHandler} className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Logout</button>
-                                            <a href="/dashboard" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Dashboard</a> </>
+                                            <a href="/dashboard/1" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Dashboard</a> </>
                                             : <><a href="/sign-in" className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Sign In</a>
                                                 <a href="/sign-up" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Sign Up</a> </> }
                                     </div>

@@ -5,12 +5,11 @@ const DashboardTable = (props) => {
     const navigate = useNavigate();
     const data= props.data
     const dates=props.dates
-
+    console.log(data,dates)
   return (
       <>
               {dates && dates.map(date => {
                   const filtered = data.filter(x => x.timestamps["$date"].slice(0, 10) === date)
-                  filtered.reverse()
                   console.log("FILTERED", filtered)
                   return (
                       <>

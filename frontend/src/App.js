@@ -17,7 +17,7 @@ const App = ()=> {
         <Route path="/sign-in" element={<SignInSCreen/>}/>
         <Route path="/report/:id" element={<ReportScreen/>}/>
         <Route path="/upload" element={<UploadScreen/>}/>
-        <Route path="/dashboard" element={<DashboardScreen />} />
+        <Route path="/dashboard/:pageNumber" element={<DashboardScreen />} />
         <Route path="/about" element={<AboutUsScreen />} />
       </Routes>
       
