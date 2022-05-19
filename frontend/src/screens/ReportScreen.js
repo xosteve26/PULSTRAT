@@ -184,7 +184,7 @@ const ReportScreen = () => {
       <div>
         <Header />
         <div className="container w-full mx-auto pt-2">
-          <div className="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
+          <div className="pt-32 w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
             <h1 className="text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl pb-3">
               <span className="block xl:inline">Diagnostic</span>
               <span className="block text-yellow-400 xl:inline"> Report</span>

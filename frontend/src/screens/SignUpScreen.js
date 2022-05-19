@@ -17,7 +17,7 @@ const SignUpScreen = () => {
         const res = await axios.post(`${baseURL}/register`, { email, password, name })
         console.log(res.data.status)
         if (res.data.status) {
-            window.sessionStorage.setItem('LoggedIn', false)
+            window.localStorage.setItem('LoggedIn', false)
             window.location.href = '/sign-in'
         }
         else {
