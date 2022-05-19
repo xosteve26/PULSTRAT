@@ -16,6 +16,7 @@ const DashboardScreen = () => {
     const params = useParams();
     const [data, setData] = useState([]);
     const [received, setReceived] = useState(false);
+    console.log("RECEIVED BEGINING",received)
     const [dates, setDates] = useState(null);
     const [pageN, setPageN] = useState(1);
     const [totalPages, setTotalPages] = useState(null);
@@ -23,7 +24,7 @@ const DashboardScreen = () => {
     const originalNumberOfScans=window.sessionStorage.getItem("originalNumberOfScans");
     const currentNumberOfScans=window.sessionStorage.getItem("numberOfScans");
     
-    console.log(data)
+    console.log("data begining",data)
     
     useEffect(async() => {
         const loggedIn = window.sessionStorage.getItem("LoggedIn")
@@ -42,21 +43,22 @@ const DashboardScreen = () => {
             "currentNumberOfScans":currentNumberOfScans
         }
         if(!received){
-            const res = await axios.post(process.env.REACT_APP_BASE_URL + '/scans/'+parseInt(pageNumber), numberData, { withCredentials: true });
+            console.log("IN FETCH DATA")
+            const res = await axios.post(process.env.REACT_APP_BASE_URL + '/scans/' + parseInt(pageNumber), numberData, { withCredentials: true });
             setData(res.data.scans);
-            console.log("DATA",res.data)
+            console.log("DATA", res.data)
             setTotalPages(res.data.totalPages)
-            console.log("TOTAL PAGES",totalPages)
+            console.log("TOTAL PAGES", totalPages)
             window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
             console.log("data", res.data)
-            
-            
-            setReceived(true);
-            console.log("RECEIVED",received)
-            // console.log("dates", dateOrder)
-
-            console.log(res.data.scans);
         }
+        
+        setReceived(true);
+        console.log("RECEIVED",received)
+        // console.log("dates", dateOrder)
+
+        // console.log(res.data.scans);
+       
         const dateOrder = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
         setDates(dateOrder)
 
@@ -81,7 +83,7 @@ const DashboardScreen = () => {
             </h1>
             
             
-            {!received && !dates ? 
+            {!received? 
 
                 <>
                     <div className="grid place-items-center h-screen"><ThreeBody
@@ -98,7 +100,7 @@ const DashboardScreen = () => {
                     <DashboardTable data={data} dates={dates}/>
                 </div>
             }
-            <Pagination totalPages={totalPages} currentPage={pageN}/>
+            {received && <Pagination totalPages={totalPages} currentPage={pageN}/>}
         <Footer />
     </>
     )
