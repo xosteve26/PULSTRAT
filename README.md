@@ -1,6 +1,6 @@
 # Pulstrat - A Pneumonia Detecting Platform
 
-> A Pneumonia Detecting Web Application Built Using The MERN Stack , Tailwind CSS & SendGrid
+> A Pneumonia Detecting Web Application Built Using Python Flask(Backend server), React Js(Frontend UI), Tailwind CSS, Mongo DB(Database) & SendGrid
 
 ## Features
 
@@ -15,9 +15,9 @@
 Create a .env file in then frontend & backend folder and add the following
 ##### Backend
 ```
-MONGO_URI = Your Mongo DB ATLAS URI [Mongo DB connection string]
+MONGO_URI = Your Mongo DB ATLAS URI [ Mongo DB connection string ]
 SECRET_KEY = Your Flask Secret Key
-SENDGRID_API_KEY = Your SendGrid API key [ For email functionality]
+SENDGRID_API_KEY = Your SendGrid API key [ For email functionality ]
 ```
 
 ##### Frontend
