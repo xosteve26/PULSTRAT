@@ -9,7 +9,8 @@
  - User Authentication 
  - Dashboard to display user's history of scans
  - Send reports to registered email
-
+ - Caching system logic embedded to obtain history of scans quickly
+ - Downloadable reports in pdf format
 ## Environmental Variables
 
 Create a .env file in then frontend & backend folder and add the following

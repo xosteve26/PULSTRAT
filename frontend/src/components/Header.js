@@ -15,7 +15,7 @@ const Header = () => {
     }
     return (
         <>
-            <section className="fixed w-full px-8 antialiased bg-white bg-opacity-80 bg-clip-padding backdrop-filter backdrop-blur-lg z-50" style={{"backdrop-filter": "blur(20px)"}}>
+            <section className="fixed w-full px-8 antialiased bg-white bg-opacity-80 bg-clip-padding backdrop-filter backdrop-blur-lg z-50" style={{"backdrop-filter": "blur(10px)"}}>
                 <div className="mx-auto max-w-7xl">
 
                     <nav className="relative z-50 h-24 select-none" x-data="{ showMenu: false }">

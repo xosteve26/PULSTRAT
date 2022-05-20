@@ -10,6 +10,7 @@ const SignUpScreen = () => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
     const [Loading, setLoading] = useState(false)
+    const [Message, setMessage] = useState('')
 
     const submitHandler = async (e) => {
         e.preventDefault()
@@ -23,6 +24,7 @@ const SignUpScreen = () => {
         else {
             setError(true)
             setLoading(false)
+            setMessage(res.data.message)
         }
 
     }
@@ -80,7 +82,7 @@ const SignUpScreen = () => {
                                         <button type='submit'
                                             className="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-yellow-400 hover:bg-yellow-500 ease rounded-full">Create
                                             Account</button>
-                                        {error && <div className="pt-6 flex justify-between items-center text-red-400"> <span>Enter Valid Values In All Fields</span>  </div>}
+                                        {error && <div className="pt-6 flex justify-between items-center text-red-400"> <span>{Message}</span>  </div>}
                                     </div>
                                   
                                 </div>

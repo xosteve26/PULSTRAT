@@ -57,6 +57,9 @@ const ReportComponent = React.forwardRef((props, ref) => {
               <p className="text-sm text-black-400 font-bold">
                 User ID: <span className="font-normal">{location.state['userId']['$oid']}</span>{" "}
               </p>
+            <p className="text-sm text-black-400 font-bold">
+              File Name: <span className="font-normal">{location.state['fileName'] ? location.state['fileName'] : 'N/A'}</span>{" "}
+            </p>
             </div>
           </div>
           <div className="pt-16">
@@ -150,6 +153,7 @@ const ReportScreen = () => {
       if(!ready){
         console.log("IN ELSE CACHE REPORT")
         location.state = JSON.parse(window.sessionStorage.getItem(id))
+        console.log(location)
         setReady(true)
       }
       

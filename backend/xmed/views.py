@@ -89,6 +89,7 @@ def login():
         return {"status":False}
     print("USER", findUser)
     
+    
     hashedPassword = findUser["password"]
     if bcrypt.checkpw(password.encode(), hashedPassword):
         id = findUser["_id"]
@@ -96,7 +97,7 @@ def login():
         session["name"] = findUser["name"]
         session["id"] = helpers.parse_json(id)
 
-        
+        print("NAME", session["name"])
         print(id)
         print("It Matches!")
         return {"status":True, "userData":json.dumps({"id":helpers.parse_json(id),"name":findUser["name"], "email":findUser["email"]})}
@@ -116,9 +117,12 @@ def register():
     name = data["name"]
     email = data["email"]
     password = data["password"]
+    print(name,email,password)
     if not name or not email or not password:
+        print(" NO DATA")
         return {"status": False, "message": "Enter Valid Values In All Fields"}
     if(user_collection.find_one({"email": email})):
+        print(" EMAIL EXISTS")
         return {"status": False, "message": "USER WITH THIS EMAIL EXISTS"}
     else:
         hashedPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
@@ -142,10 +146,11 @@ def get_scans(id):
     # Cache System Logic
     if (originalNumberOfScans and currentNumberOfScans and originalNumberOfScans == currentNumberOfScans):
         if('scans'+str(pageNumber) in session):
-            print("CACHED")
+            print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
             print(len(session['scans'+str(pageNumber)][0]))
             return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
         else:
+            print("DATA FETCHED FROM DB")
             scans = []
             totalDocuments = prediction_collection.count_documents(
                 {"userId": ObjectId(session["id"]["$oid"])})
@@ -162,6 +167,7 @@ def get_scans(id):
 
             return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
     else:
+        print("DATA FETCHED FROM DB")
         scans = []
         totalDocuments = prediction_collection.count(
             {"userId": ObjectId(session["id"]["$oid"])})

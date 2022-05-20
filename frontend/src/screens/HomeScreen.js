@@ -25,11 +25,11 @@ const HomeScreen = () => {
         <Header />
             <section className="px-2 py-20 bg-white md:px-0">
                 <div className="container items-center max-w-6xl px-8 mt-20 mx-auto xl:px-5">
-                    <div className="flex flex-wrap items-center sm:-mx-3">
+                    <div className="pt-8 flex flex-wrap items-center sm:-mx-3">
                     <div className="w-full md:w-1/2 md:px-3">
                             {userExists === 'true' ? <div className="w-full pb-6 space-y-6 sm:max-w-md lg:max-w-lg md:space-y-4 lg:space-y-8 xl:space-y-9 sm:pr-5 lg:pr-0 md:pb-0">
                                 <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl">
-                                    <span className="block xl:inline">Glad You Could Join Us! </span>
+                                    <span className="block xl:inline">Welcome to Pulstrat, </span>
                                     <span className="block text-yellow-400 xl:inline">{userData.name}</span>
                                 </h1>
                                 <p className="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl">You can get started by clicking on either of the buttons below to upload a new image or access your past scans.</p>
@@ -38,7 +38,7 @@ const HomeScreen = () => {
                                         Upload
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </a>
-                                    <a href="/dashboard" className="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600">
+                                    <a href="/dashboard/1" className="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600">
                                         Dashboard
                                     </a>
                                 </div>
@@ -70,7 +70,7 @@ const HomeScreen = () => {
             </section>
 
             <section className=" w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24" id="features">
-                    <p className="text-xs font-bold text-left text-yellow-400 uppercase sm:mx-6 sm:text-center sm:text-normal sm:font-bold">
+                    <p className="pt-8 text-xs font-bold text-left text-yellow-400 uppercase sm:mx-6 sm:text-center sm:text-normal sm:font-bold">
                         Wondering what we do ?
                     </p>
                 <h3
