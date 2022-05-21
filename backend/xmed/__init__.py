@@ -5,6 +5,7 @@ from flask_cors import CORS
 import logging
 import pymongo
 import json
+# import redis
 from tensorflow.keras.models import load_model
 
 from dotenv import load_dotenv
@@ -21,6 +22,7 @@ CLASSIFIER_MODEL = (mod_path / '../model/model92.h5').resolve()
 class ApplicationConfig:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SESSION_TYPE = 'filesystem'
+    # SESSION_REDIS = redis.from_url('redis://localhost:6379')
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
     UPLOAD_FOLDER = UPLOAD_FOLDER

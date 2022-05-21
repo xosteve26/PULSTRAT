@@ -21,15 +21,15 @@ message = Mail()
 # print(r.get('foo'))
 
 
-@app.route('/', methods=["GET", "POST"])
-def initial():
-    data=json.loads(request.data)
-    id=data['id']
-    print("data",data['id'])
-    numberOfScans = prediction_collection.count_documents(
-        {"userId": ObjectId(id)})
+# @app.route('/', methods=["GET", "POST"])
+# def initial():
+#     data=json.loads(request.data)
+#     id=data['id']
+#     print("data",data['id'])
+#     numberOfScans = prediction_collection.count_documents(
+#         {"userId": ObjectId(id)})
 
-    return jsonify(nScan=numberOfScans)
+#     return jsonify(nScan=numberOfScans)
 
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
@@ -138,46 +138,74 @@ def register():
 def get_scans(id):
     pageSize=10
     pageNumber=int(id) if id else 1
+    
     data=json.loads(request.data)
+    print(type(data["cacheRecords"]))
     originalNumberOfScans=data["originalNumberOfScans"]
     currentNumberOfScans=data["currentNumberOfScans"]
+    cachingAvailable=data["cacheAvailable"]
+    cacheRecords=data["cacheRecords"]
+    print(cacheRecords)
     print(originalNumberOfScans,currentNumberOfScans)
 
     # Cache System Logic
-    if (originalNumberOfScans and currentNumberOfScans and originalNumberOfScans == currentNumberOfScans):
-        if('scans'+str(pageNumber) in session):
-            print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
-            print(len(session['scans'+str(pageNumber)][0]))
-            return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
-        else:
-            print("DATA FETCHED FROM DB")
-            scans = []
-            totalDocuments = prediction_collection.count_documents(
-                {"userId": ObjectId(session["id"]["$oid"])})
-            scansObj = prediction_collection.find(
-                {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps",-1).limit(pageSize).skip(pageSize*(pageNumber-1))
-            # print(scansObj)
-            for scan in scansObj:
-                scans.append(helpers.parse_json(scan))
-            session['scans'+str(pageNumber)]=[scans, totalDocuments]
-            print(len(scans))
+    if (str(pageNumber) in cacheRecords):
+        if(cacheRecords[str(pageNumber)]):
+            if('scans'+str(pageNumber) in session):
+                print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
+                print(len(session['scans'+str(pageNumber)][0]))
+                return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
+            else:
+                print("DATA FETCHED FROM DB - Not Found in sessions")
+                # scans = []
+                # totalDocuments = prediction_collection.count_documents(
+                #     {"userId": ObjectId(session["id"]["$oid"])})
+                # scansObj = prediction_collection.find(
+                #     {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps",-1).limit(pageSize).skip(pageSize*(pageNumber-1))
+                # # print(scansObj)
+                # for scan in scansObj:
+                #     scans.append(helpers.parse_json(scan))
+                # session['scans'+str(pageNumber)]=[scans, totalDocuments]
+                # print(len(scans))
+                scans, totalDocuments = helpers.MongoFetch(
+                    pageSize, pageNumber, message="DATA FETCHED FROM DB - Not Found in sessions")
 
+
+                # r.set('cache?'+session["id"]["$oid"], dumps(scans))
+
+                return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
+        else:
+            # print("DATA FETCHED FROM DB - cache available false")
+            # scans = []
+            # totalDocuments = prediction_collection.count_documents(
+            #     {"userId": ObjectId(session["id"]["$oid"])})
+            # scansObj = prediction_collection.find(
+            #     {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
+            # # print(scansObj)
+            # for scan in scansObj:
+            #     scans.append(helpers.parse_json(scan))
+            # session['scans'+str(pageNumber)] = [scans, totalDocuments]
+            # print(len(scans))
 
             # r.set('cache?'+session["id"]["$oid"], dumps(scans))
+            scans, totalDocuments = helpers.MongoFetch(
+                pageSize, pageNumber, message="DATA FETCHED FROM DB - cache not available")
 
             return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
     else:
-        print("DATA FETCHED FROM DB")
-        scans = []
-        totalDocuments = prediction_collection.count(
-            {"userId": ObjectId(session["id"]["$oid"])})
-        scansObj = prediction_collection.find(
-            {"userId": ObjectId(session["id"]["$oid"])}).limit(pageSize).skip(pageSize*(pageNumber-1))
-        # print(scansObj)
-        for scan in scansObj:
-            scans.append(helpers.parse_json(scan))
-        session['scans'+str(pageNumber)] = [scans, totalDocuments]
-        print(len(scans))
+        # print("DATA FETCHED FROM DB - page number not in cache records")
+        # scans = []
+        # totalDocuments = prediction_collection.count_documents(
+        #     {"userId": ObjectId(session["id"]["$oid"])})
+        # scansObj = prediction_collection.find(
+        #     {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
+        # # print(scansObj)
+        # for scan in scansObj:
+        #     scans.append(helpers.parse_json(scan))
+        # session['scans'+str(pageNumber)] = [scans, totalDocuments]
+        # print(len(scans))
+        scans, totalDocuments = helpers.MongoFetch(
+            pageSize, pageNumber, message="DATA FETCHED FROM DB - page number not in cache records")
         return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
 
 

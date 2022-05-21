@@ -16,8 +16,8 @@ jobs:
           name: Login to Docker Hub
           uses: docker/login-action@v1
           with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
+            username: ${{ secrets.DOCKER_HUB_USERNAME }}
+            password: ${{ secrets.DOCKER_HUB_PASSWORD }}
         -
           name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v1
@@ -31,7 +31,7 @@ jobs:
             build-args: |
               URI=${{ secrets.MONGO_URI }}
               SECRET=${{ secrets.SECRET_KEY }}
-            tags: ${{ secrets.DOCKER_USERNAME }}/pulstrat-backend:backend
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pulstrat-backend:backend
 
 
 
@@ -48,8 +48,8 @@ jobs:
           name: Login to Docker Hub
           uses: docker/login-action@v1
           with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
+            username: ${{ secrets.DOCKER_HUB_USERNAME }}
+            password: ${{ secrets.DOCKER_HUB_PASSWORD }}
         -
           name: Set up Docker Buildx
           uses: docker/setup-buildx-action@v1
@@ -61,5 +61,5 @@ jobs:
             file: ./frontend/Dockerfile
             push: true
             build-args: |
-              URL=${{ secrets.URL }}
-            tags: ${{ secrets.DOCKER_USERNAME }}/pulstrat-frontend:latest
+              URL=${{ secrets.BASE_URL }}
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pulstrat-frontend:latest

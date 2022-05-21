@@ -58,8 +58,16 @@ const UploadScreen = () => {
             const res = await axios.post(`${baseURL}/upload`, data, headers)
             console.log("RES",res)
             setLoading(false)
-            const numberOfScans=window.sessionStorage.getItem('numberOfScans')
-            window.sessionStorage.setItem('numberOfScans',parseInt(numberOfScans)+1)
+            // const numberOfScans=window.sessionStorage.getItem('numberOfScans')
+            // window.sessionStorage.setItem('numberOfScans',parseInt(numberOfScans)+1)
+            // window.sessionStorage.setItem('cachingRequired',false)
+            const cacheRecord=window.sessionStorage.getItem('cacheRecords')
+            if(window.sessionStorage.getItem("cacheRecords") ){
+                const cacheRecords=JSON.parse(cacheRecord)
+                cacheRecords["1"]=false
+                window.sessionStorage.setItem("cacheRecords",JSON.stringify(cacheRecords))
+            }
+
 
             navigate(`/report/${res.data.id}`)
         }

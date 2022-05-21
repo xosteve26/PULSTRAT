@@ -13,11 +13,13 @@ const HomeScreen = () => {
     useEffect(async() => {
         if(userExists){
             const id={id:userData["id"]["$oid"]}
-            const data =await axios.post(process.env.REACT_APP_BASE_URL + '/' ,id,{ withCredentials: true });
-            const numberOfScans = data.data.nScan;
-            console.log(numberOfScans)
-            window.sessionStorage.setItem('originalNumberOfScans',numberOfScans);
-            window.sessionStorage.setItem('numberOfScans',numberOfScans);
+            // const data =await axios.post(process.env.REACT_APP_BASE_URL + '/' ,id,{ withCredentials: true });
+            // const numberOfScans = data.data.nScan;
+            // console.log(numberOfScans)
+            console.log(window.sessionStorage.getItem('cacheAvailable'))
+            !window.sessionStorage.getItem('cacheRecords') && window.sessionStorage.setItem("cacheRecords",JSON.stringify({}))
+            // window.sessionStorage.setItem('originalNumberOfScans',numberOfScans);
+            // window.sessionStorage.setItem('numberOfScans',numberOfScans);
         }
     } , [])
     return (

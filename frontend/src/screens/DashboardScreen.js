@@ -21,8 +21,12 @@ const DashboardScreen = () => {
     const [pageN, setPageN] = useState(1);
     const [totalPages, setTotalPages] = useState(null);
 
-    const originalNumberOfScans=window.sessionStorage.getItem("originalNumberOfScans");
-    const currentNumberOfScans=window.sessionStorage.getItem("numberOfScans");
+    // const cachingRequired = window.sessionStorage.getItem("cachingRequired")
+    // const cacheAvailable=JSON.parse(window.sessionStorage.getItem("cacheAvailable"));
+    // console.log("cache value",cachingRequired)
+    const cacheRecords=JSON.parse(window.sessionStorage.getItem("cacheRecords"))
+    // const originalNumberOfScans=window.sessionStorage.getItem("originalNumberOfScans");
+    // const currentNumberOfScans=window.sessionStorage.getItem("numberOfScans");
     
     console.log("data begining",data)
     
@@ -38,9 +42,13 @@ const DashboardScreen = () => {
         const pageNumber = params.pageNumber || 1;
         setPageN(pageNumber);
         console.log("PAGE NUMB", pageN)
+
         const numberData={
-            "originalNumberOfScans":originalNumberOfScans,
-            "currentNumberOfScans":currentNumberOfScans
+            // "cacheAvailable":cacheAvailable,
+            // "cacheRequired":cachingRequired,
+            // "originalNumberOfScans":originalNumberOfScans,
+            // "currentNumberOfScans":currentNumberOfScans,
+            "cacheRecords":cacheRecords
         }
         if(!received){
             console.log("IN FETCH DATA")
@@ -49,7 +57,16 @@ const DashboardScreen = () => {
             console.log("DATA", res.data)
             setTotalPages(res.data.totalPages)
             console.log("TOTAL PAGES", totalPages)
-            window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
+           
+            console.log("IN IF")
+            cacheRecords[pageNumber]=true
+            window.sessionStorage.setItem("cacheRecords",JSON.stringify(cacheRecords))
+            console.log("CACHE RECORDS",cacheRecords)
+            // if (!cacheAvailable.includes(pageNumber )){
+            //     cacheAvailable.push(pageNumber)
+            //     window.sessionStorage.setItem('cacheAvailable',JSON.stringify(cacheAvailable))
+            // }
+            // window.sessionStorage.setItem('originalNumberOfScans', parseInt(currentNumberOfScans));
             console.log("data", res.data)
         }
         

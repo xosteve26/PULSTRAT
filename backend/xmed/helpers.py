@@ -1,4 +1,5 @@
 from fileinput import filename
+from flask import session, jsonify
 import matplotlib.pyplot as plt
 from tensorflow import keras
 from keras import preprocessing
@@ -6,10 +7,11 @@ from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 from bson import json_util
 import json
-
+from bson import ObjectId
+from . import  user_collection, prediction_collection
 from . import model
 
-
+import math
 from pathlib import Path
 import tensorflow as tf
 
@@ -150,6 +152,23 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
 # plt.matshow(heatmap2)
 # plt.savefig('hm2.png')
 # plt.show()
+
+def MongoFetch(pageSize,pageNumber, message):
+    print(message)
+    scans = []
+    totalDocuments = prediction_collection.count_documents(
+        {"userId": ObjectId(session["id"]["$oid"])})
+    scansObj = prediction_collection.find(
+        {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
+    # print(scansObj)
+    for scan in scansObj:
+        scans.append(parse_json(scan))
+    session['scans'+str(pageNumber)] = [scans, totalDocuments]
+    print(len(scans))
+
+    # r.set('cache?'+session["id"]["$oid"], dumps(scans))
+
+    return scans,totalDocuments
 
 
 def save_and_display_gradcam(img_path, heatmap, filename, alpha=0.4):
