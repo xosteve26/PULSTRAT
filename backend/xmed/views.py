@@ -141,12 +141,12 @@ def get_scans(id):
     
     data=json.loads(request.data)
     print(type(data["cacheRecords"]))
-    originalNumberOfScans=data["originalNumberOfScans"]
-    currentNumberOfScans=data["currentNumberOfScans"]
-    cachingAvailable=data["cacheAvailable"]
+    # originalNumberOfScans=data["originalNumberOfScans"]
+    # currentNumberOfScans=data["currentNumberOfScans"]
+    # cachingAvailable=data["cacheAvailable"]
     cacheRecords=data["cacheRecords"]
     print(cacheRecords)
-    print(originalNumberOfScans,currentNumberOfScans)
+    # print(originalNumberOfScans,currentNumberOfScans)
 
     # Cache System Logic
     if (str(pageNumber) in cacheRecords):
