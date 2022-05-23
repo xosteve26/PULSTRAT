@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Pagination = (props)=> {
@@ -22,8 +22,6 @@ const Pagination = (props)=> {
     }
 
 
-    
-    
     return (
         <>
             <div className="flex items-center justify-center py-10 lg:px-0 sm:px-6 px-4">

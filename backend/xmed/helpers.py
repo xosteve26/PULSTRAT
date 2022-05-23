@@ -21,19 +21,19 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 
-# def cdn_upload(img_path,img_size,filename):
-#     model.layers[-1].activation = None
-#     preprocess_input = keras.applications.densenet.preprocess_input
-#     # decode_predictions = keras.applications.densenet.decode_predictions
-#     last_conv_layer_name = "conv5_block16_concat"
-#     initial_conv_layer_name = "conv3_block1_concat"
-#     img_array = preprocess_input(get_img_array(img_path, size=img_size))
-#     heatmap = make_gradcam_heatmap(img_array, model, initial_conv_layer_name)
-#     heatmap_unsaved = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
-#     plt.matshow(heatmap)
-#     plt.savefig('./uploaded_images/heatmaps/'+filename)
-#     localized_image=save_and_display_gradcam(img_path, heatmap_unsaved, filename)
-#     print(model.summary())
+def localized_heatmap_generator(img_path,img_size,filename):
+    model.layers[-1].activation = None
+    preprocess_input = keras.applications.densenet.preprocess_input
+    # decode_predictions = keras.applications.densenet.decode_predictions
+    last_conv_layer_name = "conv5_block16_concat"
+    initial_conv_layer_name = "conv3_block1_concat"
+    img_array = preprocess_input(get_img_array(img_path, size=img_size))
+    heatmap = make_gradcam_heatmap(img_array, model, initial_conv_layer_name)
+    heatmap_unsaved = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
+    plt.matshow(heatmap)
+    plt.savefig('./uploaded_images/heatmaps/'+filename)
+    localized_image=save_and_display_gradcam(img_path, heatmap_unsaved, filename)
+    print(model.summary())
     
     
     
@@ -67,7 +67,7 @@ def predict(destination, filename):
     print("PNEUMONIA result is:", predictions[0][0]>0.5)
     result = predictions[0][0]>0.5
     print(result)
-    cdn_upload(destination,(180,180),filename)
+    localized_heatmap_generator(destination,(180,180),filename)
     # prediction_collection.insert_one({"result":result})
     return result
 

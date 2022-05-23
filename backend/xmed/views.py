@@ -149,14 +149,22 @@ def get_scans(id):
     cacheRecords=data["cacheRecords"]
     print(cacheRecords)
 
-
+    currentCountOfDocuments = prediction_collection.count_documents(
+        {"userId": ObjectId(session["id"]["$oid"])})
     # Cache System Logic
     if (str(pageNumber) in cacheRecords):
         if(cacheRecords[str(pageNumber)]):
             if('scans'+str(pageNumber) in session):
-                print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
-                print(len(session['scans'+str(pageNumber)][0]))
-                return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
+                if(session['scans'+str(pageNumber)][1] == currentCountOfDocuments):
+                    print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
+                    print(len(session['scans'+str(pageNumber)][0]))
+                    return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
+                else:
+                    scans, totalDocuments = helpers.MongoFetch(
+                        pageSize, pageNumber, message="DATA FETCHED FROM DB - Total documents don't match")
+
+                    return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
+
             else:
             
                 scans, totalDocuments = helpers.MongoFetch(
@@ -167,7 +175,7 @@ def get_scans(id):
         else:
 
             scans, totalDocuments = helpers.MongoFetch(
-                pageSize, pageNumber, message="DATA FETCHED FROM DB - cache not available")
+                pageSize, pageNumber, message="DATA FETCHED FROM DB - cache not available cache records states false")
 
             return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
     else:
