@@ -21,19 +21,19 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 
-def cdn_upload(img_path,img_size,filename):
-    model.layers[-1].activation = None
-    preprocess_input = keras.applications.densenet.preprocess_input
-    # decode_predictions = keras.applications.densenet.decode_predictions
-    last_conv_layer_name = "conv5_block16_concat"
-    initial_conv_layer_name = "conv3_block1_concat"
-    img_array = preprocess_input(get_img_array(img_path, size=img_size))
-    heatmap = make_gradcam_heatmap(img_array, model, initial_conv_layer_name)
-    heatmap_unsaved = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
-    plt.matshow(heatmap)
-    plt.savefig('./uploaded_images/heatmaps/'+filename)
-    localized_image=save_and_display_gradcam(img_path, heatmap_unsaved, filename)
-    print(model.summary())
+# def cdn_upload(img_path,img_size,filename):
+#     model.layers[-1].activation = None
+#     preprocess_input = keras.applications.densenet.preprocess_input
+#     # decode_predictions = keras.applications.densenet.decode_predictions
+#     last_conv_layer_name = "conv5_block16_concat"
+#     initial_conv_layer_name = "conv3_block1_concat"
+#     img_array = preprocess_input(get_img_array(img_path, size=img_size))
+#     heatmap = make_gradcam_heatmap(img_array, model, initial_conv_layer_name)
+#     heatmap_unsaved = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
+#     plt.matshow(heatmap)
+#     plt.savefig('./uploaded_images/heatmaps/'+filename)
+#     localized_image=save_and_display_gradcam(img_path, heatmap_unsaved, filename)
+#     print(model.summary())
     
     
     
@@ -159,7 +159,7 @@ def MongoFetch(pageSize,pageNumber, message):
     totalDocuments = prediction_collection.count_documents(
         {"userId": ObjectId(session["id"]["$oid"])})
     scansObj = prediction_collection.find(
-        {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
+        {"userId": ObjectId(session["id"]["$oid"])},{"heatmapImage":0}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
     # print(scansObj)
     for scan in scansObj:
         scans.append(parse_json(scan))

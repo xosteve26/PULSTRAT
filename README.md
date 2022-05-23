@@ -55,6 +55,12 @@ cd backend
 python app.py
 ```
 
+## Test Dataset
+This  test dataset consists of a total of 624 images, out of which 234 images belong to the NORMAL class and the remaining 390 belong to the PNEUMONIA class. Kidnly download the dataset through this link and feel free to test it out.
+``` 
+ https://nesrt.herokuapp.com/sCaD4X00P 
+ ```
+
 ## Build & Deploy
 
 ```

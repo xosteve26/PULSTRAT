@@ -1,4 +1,7 @@
+from operator import mod
 import os, json, bcrypt
+from threading import local
+import shutil
 import datetime
 
 from bson import ObjectId
@@ -9,7 +12,8 @@ import base64
 import math
 from . import app,UPLOAD_FOLDER, user_collection, prediction_collection
 from . import helpers
-
+from . import mod_path
+from pathlib import Path
 #SendGrid 
 import os
 from sendgrid import SendGridAPIClient
@@ -60,7 +64,7 @@ def fileUpload():
     result = helpers.predict(destination, filename)
     print("RES =", result)
     
-    CDN_URL= helpers.cdn_upload(destination,(180,180), filename)
+    # CDN_URL= helpers.cdn_upload(destination,(180,180), filename)
     heatmap_dest = "./uploaded_images/heatmaps/"+filename
     with open(heatmap_dest, "rb") as heatmap_img_file:
         encoded_heatmap_image = base64.b64encode(heatmap_img_file.read())
@@ -141,12 +145,10 @@ def get_scans(id):
     
     data=json.loads(request.data)
     print(type(data["cacheRecords"]))
-    # originalNumberOfScans=data["originalNumberOfScans"]
-    # currentNumberOfScans=data["currentNumberOfScans"]
-    # cachingAvailable=data["cacheAvailable"]
+
     cacheRecords=data["cacheRecords"]
     print(cacheRecords)
-    # print(originalNumberOfScans,currentNumberOfScans)
+
 
     # Cache System Logic
     if (str(pageNumber) in cacheRecords):
@@ -156,54 +158,20 @@ def get_scans(id):
                 print(len(session['scans'+str(pageNumber)][0]))
                 return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
             else:
-                print("DATA FETCHED FROM DB - Not Found in sessions")
-                # scans = []
-                # totalDocuments = prediction_collection.count_documents(
-                #     {"userId": ObjectId(session["id"]["$oid"])})
-                # scansObj = prediction_collection.find(
-                #     {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps",-1).limit(pageSize).skip(pageSize*(pageNumber-1))
-                # # print(scansObj)
-                # for scan in scansObj:
-                #     scans.append(helpers.parse_json(scan))
-                # session['scans'+str(pageNumber)]=[scans, totalDocuments]
-                # print(len(scans))
+            
                 scans, totalDocuments = helpers.MongoFetch(
                     pageSize, pageNumber, message="DATA FETCHED FROM DB - Not Found in sessions")
 
 
-                # r.set('cache?'+session["id"]["$oid"], dumps(scans))
-
                 return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
         else:
-            # print("DATA FETCHED FROM DB - cache available false")
-            # scans = []
-            # totalDocuments = prediction_collection.count_documents(
-            #     {"userId": ObjectId(session["id"]["$oid"])})
-            # scansObj = prediction_collection.find(
-            #     {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
-            # # print(scansObj)
-            # for scan in scansObj:
-            #     scans.append(helpers.parse_json(scan))
-            # session['scans'+str(pageNumber)] = [scans, totalDocuments]
-            # print(len(scans))
 
-            # r.set('cache?'+session["id"]["$oid"], dumps(scans))
             scans, totalDocuments = helpers.MongoFetch(
                 pageSize, pageNumber, message="DATA FETCHED FROM DB - cache not available")
 
             return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
     else:
-        # print("DATA FETCHED FROM DB - page number not in cache records")
-        # scans = []
-        # totalDocuments = prediction_collection.count_documents(
-        #     {"userId": ObjectId(session["id"]["$oid"])})
-        # scansObj = prediction_collection.find(
-        #     {"userId": ObjectId(session["id"]["$oid"])}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
-        # # print(scansObj)
-        # for scan in scansObj:
-        #     scans.append(helpers.parse_json(scan))
-        # session['scans'+str(pageNumber)] = [scans, totalDocuments]
-        # print(len(scans))
+
         scans, totalDocuments = helpers.MongoFetch(
             pageSize, pageNumber, message="DATA FETCHED FROM DB - page number not in cache records")
         return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
@@ -213,7 +181,7 @@ def get_scans(id):
 
 @app.route('/report/<string:id>', methods=["GET"])
 def report(id):
-    reportFile=helpers.parse_json(prediction_collection.find_one({"_id":ObjectId(id)}))
+    reportFile=helpers.parse_json(prediction_collection.find_one({"_id":ObjectId(id)},{"heatmapImage":0}))
     return jsonify(report=reportFile)
 
 
@@ -261,4 +229,17 @@ def email():
 @app.route('/logout',methods=["GET"])
 def logout():
     session.clear()
+    original = "uploaded_images/original"
+    hm = "uploaded_images/heatmaps"
+    localized = 'uploaded_images/localized'
+    print(os.path.exists(hm), os.path.exists(localized), os.path.exists(original))
+    if os.path.exists(hm):
+        print("REMOVED HEATMAPS FOLDER")
+        shutil.rmtree((mod_path / '../uploaded_images/heatmaps').resolve())
+    if os.path.exists(localized):
+        print("REMOVED LOCALIZED FOLDER")
+        shutil.rmtree((mod_path / '../uploaded_images/localized').resolve())
+    if os.path.exists(original):
+        print("REMOVED ORIGINAL FOLDER")
+        shutil.rmtree((mod_path / '../uploaded_images/original').resolve())
     return {"status":True}

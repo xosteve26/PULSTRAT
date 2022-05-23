@@ -31,7 +31,7 @@ jobs:
             build-args: |
               URI=${{ secrets.MONGO_URI }}
               SECRET=${{ secrets.SECRET_KEY }}
-            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pulstrat-backend:backend
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pulstrat:backend
 
 
 
@@ -62,4 +62,4 @@ jobs:
             push: true
             build-args: |
               URL=${{ secrets.BASE_URL }}
-            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pulstrat-frontend:latest
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pulstrat:frontend
