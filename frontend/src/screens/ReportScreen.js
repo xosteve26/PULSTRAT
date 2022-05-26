@@ -167,8 +167,8 @@ const ReportScreen = () => {
     const emailData={
       "userName":location.state.name,
       "userEmail":userDataObject.email,
-      "scanId":location.state.id,
-      "prediction": location.state.prediction,
+      "scanId":location.state._id.$oid,
+      "prediction": location.state.result,
       "scanTime":location.state.timestamps,
     }
     const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/email`, emailData);

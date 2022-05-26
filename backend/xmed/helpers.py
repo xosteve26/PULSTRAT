@@ -2,17 +2,15 @@ from fileinput import filename
 from flask import session, jsonify
 import matplotlib.pyplot as plt
 from tensorflow import keras
-from keras import preprocessing
 from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 from bson import json_util
 import json
 from bson import ObjectId
-from . import  user_collection, prediction_collection
+from . import prediction_collection
 from . import model
 
 import math
-from pathlib import Path
 import tensorflow as tf
 
 # Display
@@ -43,19 +41,12 @@ def predict(destination, filename):
         destination, target_size=(180, 180))
     test_image=img_to_array(test_image)
 
-    # plt.imshow(test_image, cmap='gray')
-    # plt.show()
-    # test_image = preprocessing.image.img_to_array(test_image)
-    # print(test_image.shape)
-    # print(test_image.mean())
-    # print(test_image.std())
+
 
     test_image = test_image - test_image.mean()
     test_image = test_image / (test_image.std() + keras.backend.epsilon())
 
-    # print(test_image.shape)
-    # print(test_image.mean())
-    # print(test_image.std())
+ 
 
     test_image = np.expand_dims(test_image, axis=0)
     print("shape: ", test_image.shape)
@@ -68,7 +59,7 @@ def predict(destination, filename):
     result = predictions[0][0]>0.5
     print(result)
     localized_heatmap_generator(destination,(180,180),filename)
-    # prediction_collection.insert_one({"result":result})
+
     return result
 
 def parse_json(data):
@@ -122,36 +113,7 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     return heatmap.numpy()
 
 
-# model_builder = keras.applications.densenet.DenseNet121()
-# img_size = (180, 180)
-# preprocess_input = keras.applications.densenet.preprocess_input
-# decode_predictions = keras.applications.densenet.decode_predictions
 
-# img_path = keras.utils.get_file(
-#     "IM-0001-0001_pmt11w.jpg", "https://res.cloudinary.com/xzen/image/upload/v1651410968/X-Ray/NORMAL/IM-0001-0001_pmt11w.jpg")
-# img_path2 = keras.utils.get_file(
-#     "IM-0001-0001_pmt11w.jpg", "https://res.cloudinary.com/xzen/image/upload/v1651410968/X-Ray/NORMAL/IM-0001-0001_pmt11w.jpg")
-# mod_path = Path(__file__).parent
-# CLASSIFIER_MODEL = (mod_path / './model/model92.h5').resolve()
-# last_conv_layer_name = "conv3_block1_concat"
-
-# img_array = preprocess_input(get_img_array(img_path, size=img_size))
-# img_array2 = preprocess_input(get_img_array(img_path2, size=img_size))
-# model.layers[-1].activation = None
-# preds = model.predict(img_array)
-# result = preds[0][0] > 0.5
-# print(result)
-# print("Predicted:", decode_predictions(preds, top=1)[0])
-# Generate class activation heatmap
-
-# heatmap = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
-# heatmap2 = make_gradcam_heatmap(img_array2, model, "conv5_block16_concat")
-
-# Display heatmap
-# plt.matshow(heatmap)
-# plt.matshow(heatmap2)
-# plt.savefig('hm2.png')
-# plt.show()
 
 def MongoFetch(pageSize,pageNumber, message):
     print(message)
@@ -166,7 +128,6 @@ def MongoFetch(pageSize,pageNumber, message):
     session['scans'+str(pageNumber)] = [scans, totalDocuments]
     print(len(scans))
 
-    # r.set('cache?'+session["id"]["$oid"], dumps(scans))
 
     return scans,totalDocuments
 

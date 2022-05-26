@@ -7,7 +7,6 @@ import { LineWobble } from '@uiball/loaders'
 
 
 
-
 const UploadScreen = () => {
     const navigate = useNavigate();
     
@@ -81,7 +80,7 @@ const UploadScreen = () => {
         <section className="w-full px-8 py-16 bg-gray-100 xl:px-8">
             <div className="pt-28 max-w-5xl mx-auto">
                 <div className="flex flex-col items-center md:flex-row">
-
+                      
                     <div className="w-full space-y-5 md:w-3/5 md:pr-16">
                         
                         {file? <>
@@ -117,14 +116,15 @@ const UploadScreen = () => {
                             <label>Chosen files</label>
                             <input type="text" name="email" className="block w-full px-4 py-3 mb-4 border border-2 border-transparent border-gray-200 focus:ring focus:ring-yellow-400 focus:outline-none rounded-full" placeholder={fileName} />
                             <div className="block">
-                                        <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full">{!loading === true ? 'Upload' : 
-                                            <LineWobble
-                                                className='block'
-                                                size={315}
-                                                lineWeight={5}
-                                                speed={1.75}
-                                                color="black"
-                                            />}</button>
+                                        {!loading ? <button type='submit' className="w-full px-3 py-4 font-medium text-white bg-yellow-400 rounded-full"> Upload 
+                                        </button> : <div className="flex justify-center"><div>
+
+                                                <LineWobble
+                                                    size={300}
+                                                    lineWeight={8}
+                                                    speed={1.25}
+                                                    color="black"
+                                                /> </div></div>}
                             </div>
                             <p className="w-full mt-4 text-sm text-center text-gray-500">Don't have an account? <a href="/sign-up" className="text-blue-500 underline">Sign up here</a></p>
                         </div>

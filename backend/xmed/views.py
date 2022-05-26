@@ -1,11 +1,10 @@
-from operator import mod
+
 import os, json, bcrypt
-from threading import local
 import shutil
 import datetime
 
 from bson import ObjectId
-from flask import request, flash, request, redirect, url_for, session, jsonify
+from flask import request, flash, request, session, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
 import base64
@@ -20,20 +19,10 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import *
 message = Mail()
 
-# r = redis.Redis(host='localhost', port=6379, db=0)
-# r.set('foo','bar')
-# print(r.get('foo'))
 
-
-# @app.route('/', methods=["GET", "POST"])
-# def initial():
-#     data=json.loads(request.data)
-#     id=data['id']
-#     print("data",data['id'])
-#     numberOfScans = prediction_collection.count_documents(
-#         {"userId": ObjectId(id)})
-
-#     return jsonify(nScan=numberOfScans)
+@app.route('/', methods=["GET", "POST"])
+def initial():
+    return ("Pulstrat Backend API")
 
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
@@ -109,11 +98,6 @@ def login():
         print("It Does not Match :(")
         return {"status":False}
 
-    # if(user_collection.find_one({"email" : email})):
-    #     return {"status": False, "message": "USER WITH THIS EMAIL EXISTS"}
-    # else:
-    #     user_collection.insert_one({"email":email,"password":hashedPassword})
-    #     return {"status":True}
 
 @app.route('/register', methods=["POST"])
 def register():
@@ -231,7 +215,7 @@ def email():
         print(response.headers)
     except Exception as e:
         print(e.message)
-    return {"status":True}
+    return {"status":True, "message":"Email sent successfully"}
 
 
 @app.route('/logout',methods=["GET"])

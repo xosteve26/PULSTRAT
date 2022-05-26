@@ -22,11 +22,12 @@ SENDGRID_API_KEY = Your SendGrid API key [ For email functionality ]
 ```
 
 ##### Frontend
-**Frontend env consists of the base url endpoint of the flask backend**
-
+**Frontend env consists of the base url, which is the endpoint of the flask server**
+#For local environment
 ```
 REACT_APP_BASE_URL=http://localhost:5000 
 ````
+
 
 ## Install Dependencies (Frontend)
 
@@ -56,10 +57,9 @@ python app.py
 ```
 
 ## Test Dataset
-This  test dataset consists of a total of 624 images, out of which 234 images belong to the NORMAL class and the remaining 390 belong to the PNEUMONIA class. Kidnly download the dataset through this link and feel free to test it out.
-``` 
- https://nesrt.herokuapp.com/sCaD4X00P 
- ```
+This  test dataset consists of a total of 624 images, out of which 234 images belong to the NORMAL class and the remaining 390 belong to the PNEUMONIA class. Kindly download the dataset through this [link](https://nesrt.herokuapp.com/sCaD4X00P) and feel free to test it out.
+
+
 
 ## Build & Deploy
 

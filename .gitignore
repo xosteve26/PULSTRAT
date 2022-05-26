@@ -123,4 +123,7 @@ backend/flask_session
 
 backend/test.py
 xmed-key.pem
+backend/model/model_update.h5
+backend/model/model.h5
+
 

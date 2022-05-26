@@ -53,7 +53,7 @@ const Header = () => {
                                                 <span x-show="hover" class="absolute inset-0 inline-block w-full h-1 h-full transform bg-gray-900" xTransitionEnter="transition ease duration-200" xTransitionEnterStart="scale-0" xTransitionEnterEnd="scale-100" xTransitionLeave="transition ease-out duration-300" xTransitionLeaveStart="scale-100" xTransitionLeaveEnd="scale-0"></span>
                                             </span> */}
                                         </a>
-                                        {userExists == 'true' &&<>
+                                        {userExists === 'true' &&<>
                                         {/* <a href="/dashboard" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Dashboard</a> */}
                                         <a href="/upload" className="inline-block w-full py-2 mx-0 font-medium text-left text-gray-700 md:w-auto md:px-0 md:mx-2 hover:text-yellow-400 lg:mx-3 md:text-center">Upload</a> </>}
                                         <a href="#_" className="absolute top-0 left-0 hidden py-2 mt-6 ml-10 mr-2 text-gray-600 lg:inline-block md:mt-0 md:ml-2 lg:mx-3 md:relative">
@@ -62,7 +62,7 @@ const Header = () => {
                                         
                                     </div>
                                     <div className="flex flex-col items-start justify-end w-full pt-4 md:items-center md:w-1/3 md:flex-row md:py-0">
-                                        {userExists == 'true' ? <> 
+                                        {userExists === 'true' ? <> 
                                         <button onClick={logoutHandler} className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Logout</button>
                                             <a href="/dashboard/1" className="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-yellow-400 md:px-3 md:w-auto md:rounded-full lg:px-5 hover:bg-yellow-300 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-yellow-400">Dashboard</a> </>
                                             : <><a href="/sign-in" className="w-full px-6 py-2 mr-0 text-gray-700 md:px-0 lg:pl-2 md:mr-4 lg:mr-5 md:w-auto">Sign In</a>
