@@ -11,10 +11,11 @@ import logo from "../logo.png";
 import { ThreeBody } from '@uiball/loaders'
 import { useNavigate } from 'react-router-dom'
 import moment from "moment";
-
+import {Helmet , HelmetProvider} from "react-helmet-async";
 
 import ReactToPrint from "react-to-print";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 
 
@@ -31,7 +32,7 @@ const ReportComponent = React.forwardRef((props, ref) => {
           <div className="flex justify-center border-2 border-yellow-400">
 
             <div className="justify-center">
-              <img src={logo} width="180px" height="180px" />
+              <img alt="brand-logo" src={logo} width="180px" height="180px" />
             </div>
           </div>
           <div className="flex justify-between pt-16">
@@ -98,12 +99,12 @@ const ReportComponent = React.forwardRef((props, ref) => {
 
           </div>
           <div className="pt-6 flex justify-center ">
-            <div>Original Scan<
-              img src={"data:image/jpeg;base64," + location.state['originalImage']} />
+            <div>Original Scan
+              <img alt="original-x-ray" src={"data:image/jpeg;base64," + location.state['originalImage']} />
             </div>
 
             <div className="pl-6">Localized Scan
-            <img src={"data:image/jpeg;base64," + location.state['localizedImage']} /></div><br />
+            <img alt="localized-x-ray" src={"data:image/jpeg;base64," + location.state['localizedImage']} /></div><br />
           </div>
 
           {/* <div className="flex justify-center ">
@@ -130,7 +131,7 @@ const ReportScreen = () => {
   const params = useParams();
   const id = params.id;
 
-  useEffect(async () => {
+  useEffect(() => {
     
     const loggedIn = localStorage.getItem("LoggedIn")
     console.log("LOGGED IN ", loggedIn);
@@ -139,16 +140,31 @@ const ReportScreen = () => {
       alert("Please login to access this route")
       return navigate("/sign-in")
     }
-
+    
     if(!window.sessionStorage.getItem(id)){
       if (!ready) {
         console.log("FETCH REPORT")
-        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/report/${id}`)
-        window.sessionStorage.setItem(res.data.report["_id"]["$oid"], JSON.stringify(res.data.report))
-        console.log(res.data.report)
-        location.state = res.data.report
-        setReady(true)
+        
+          async function fetchData() {
+            try{
+                const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/report/${id}`, { withCredentials: true })
+
+                window.sessionStorage.setItem(res.data.report["_id"]["$oid"], JSON.stringify(res.data.report))
+                console.log(res.data.report)
+                location.state = res.data.report
+                setReady(true)
+                
+              }
+            
+            catch(e){
+              console.log("IN CATCH")
+              return navigate('/404')
+            }
+    
       }
+      fetchData();
+    }
+      
     }else{
       if(!ready){
         console.log("IN ELSE CACHE REPORT")
@@ -171,20 +187,46 @@ const ReportScreen = () => {
       "prediction": location.state.result,
       "scanTime":location.state.timestamps,
     }
-    const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/email`, emailData);
+    const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/email`, emailData, { withCredentials: true })
     const data = await res.data;
     console.log(data)
     if (data.status){
-      alert("Email sent successfully")
+      toast.success("Email sent successfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      })
+ 
     }
     else{
-      alert("Email not sent")
+      toast.error("Email not sent", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      })
+
     }
 
   }
 
   return (
     <>
+      {ready && <HelmetProvider>
+        <Helmet>
+          <title>Report #{location.state['userId']['$oid']}</title>
+        </Helmet>
+      </HelmetProvider> }
+      
       <div>
         <Header />
         <div className="container w-full mx-auto pt-2">
@@ -301,18 +343,26 @@ const ReportScreen = () => {
      
       {ready && 
       <>
-        <ReactToPrint
-          content={() => componentRef.current}
-          documentTitle={location.state.name+"-"+location.state._id["$oid"]+"Scan"}
-          trigger={() => <div className="h-[297mm] w-[210mm] p-2 pl-32"> <button className="bg-yellow-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
-            <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg>
-            <span>Download</span>
-          </button></div>}
-        />
-        
-        <div className="h-[297mm] w-[210mm] p-2 pl-32">
-          <button onClick={emailHandler} className="ml-2 bg-yellow-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"><img className="fill-current w-6 h-6 mr-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAADGElEQVR4nO2cLW8VQRSGH9qkggCOJpAUhSsJKH5Fq6AGS4LiQ/IDQKAq+BBY/gACx4cHQwUWwUfAoHpbFKWL2Huh3LS7s3Nm9sze+z7JSSq203POOzPv3t25BSGEEEIIIYQQQgghhBBCiP9ZBu4DW8AuUCmoxr14D9wDTkd3t4UNYFRAsaXHNnAlssdHsgHsF1DcUGKfQBGOBVyzDHwEToYMKP4yAs4DP5ouWggY6DZqfgyngJttF4UIsGbPZW5Zb7sgZAvaAU7Yc5lLdqhXwpGErIBrwOck6cwX34HrqQY7DjwA9vC/wyg9fgNPyeSbl4B3BRRZamwBl6O7G8gCcIP6A4d3waXET+AusGjoa2fOAs8SFjHUeAGcM/bSxDrwCf9G9B3fqJ8QFME8mXRWk7Uy6ybdi8lO03WPm0WTjjHZM9QeaSY2gVkxaesENGNdgkM16RiTvQi8nRrHzHRiMSY0JJO21PfrkPHMNM2Qqx3HKt2kY1b4Gs0r3Exb0rNg0haTbRvbTK4CSjHp3BPITO4l7GXSqUy2KAEqyjfpvvMzY5lhpZl0DpMtVoBJlGDSOU22eAFiG5DKpL0ngJlUs7CiX5OONdnUW6CZlMlU5DfB0m4CzKROyDJD20y6xNtgM7kSm0SKPdrTZAcvQEV9jvIO3Rq4Ajwfx0qH31sc/62+Tnqb6SPJSeR+4+TxMNBMn8lW/DPRxiN9HfF8HG6m74QnkerUwTr10UqvOsx4JT6J2HM3pTxtNeNdQEW3u5zS3jeY8S7gYLSZdIlv3Mx4FzAdh5l0ye+cGwn5gkYSFTPwFbg1/vkR3T4L9Eljj4cswFBo7HHIN2RERiSAMxLAGQngjARwRgI4IwGckQDOSABnJIAzEsAZCeCMBHBGAjgjAZwJEWA3exazy6jtghABviRIZF5p7V2IAK8SJDKvvEwxyAXKfNldeuwBqxH9PpQnBRQ0tHgY1ekjWALeFFDUUOL1uGdJWQIeo+2oKfaoZ37y5h9kFdgEPlD/Y1Lvor1jZ9yLTRLu+UIIIYQQQgghhBBCCCGEmB3+AJUCj1SQZSlaAAAAAElFTkSuQmCC" />Email</button>
+      <div class="flex flex row">
+        <div>
+            <ReactToPrint
+              content={() => componentRef.current}
+              documentTitle={location.state.name + "-" + location.state._id["$oid"] + "Scan"}
+              trigger={() => <div className="h-[297mm] w-[210mm] p-2 pl-32"> <button className="bg-yellow-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg>
+                <span>Download</span>
+              </button></div>}
+            />
         </div>
+        <div>
+            <div className="h-[297mm] w-[210mm] p-2 pl-2">
+              <button onClick={emailHandler} className="ml-2 bg-yellow-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"><img className="fill-current w-6 h-6 mr-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAADGElEQVR4nO2cLW8VQRSGH9qkggCOJpAUhSsJKH5Fq6AGS4LiQ/IDQKAq+BBY/gACx4cHQwUWwUfAoHpbFKWL2Huh3LS7s3Nm9sze+z7JSSq203POOzPv3t25BSGEEEIIIYQQQgghhBBCiP9ZBu4DW8AuUCmoxr14D9wDTkd3t4UNYFRAsaXHNnAlssdHsgHsF1DcUGKfQBGOBVyzDHwEToYMKP4yAs4DP5ouWggY6DZqfgyngJttF4UIsGbPZW5Zb7sgZAvaAU7Yc5lLdqhXwpGErIBrwOck6cwX34HrqQY7DjwA9vC/wyg9fgNPyeSbl4B3BRRZamwBl6O7G8gCcIP6A4d3waXET+AusGjoa2fOAs8SFjHUeAGcM/bSxDrwCf9G9B3fqJ8QFME8mXRWk7Uy6ybdi8lO03WPm0WTjjHZM9QeaSY2gVkxaesENGNdgkM16RiTvQi8nRrHzHRiMSY0JJO21PfrkPHMNM2Qqx3HKt2kY1b4Gs0r3Exb0rNg0haTbRvbTK4CSjHp3BPITO4l7GXSqUy2KAEqyjfpvvMzY5lhpZl0DpMtVoBJlGDSOU22eAFiG5DKpL0ngJlUs7CiX5OONdnUW6CZlMlU5DfB0m4CzKROyDJD20y6xNtgM7kSm0SKPdrTZAcvQEV9jvIO3Rq4Ajwfx0qH31sc/62+Tnqb6SPJSeR+4+TxMNBMn8lW/DPRxiN9HfF8HG6m74QnkerUwTr10UqvOsx4JT6J2HM3pTxtNeNdQEW3u5zS3jeY8S7gYLSZdIlv3Mx4FzAdh5l0ye+cGwn5gkYSFTPwFbg1/vkR3T4L9Eljj4cswFBo7HHIN2RERiSAMxLAGQngjARwRgI4IwGckQDOSABnJIAzEsAZCeCMBHBGAjgjAZwJEWA3exazy6jtghABviRIZF5p7V2IAK8SJDKvvEwxyAXKfNldeuwBqxH9PpQnBRQ0tHgY1ekjWALeFFDUUOL1uGdJWQIeo+2oKfaoZ37y5h9kFdgEPlD/Y1Lvor1jZ9yLTRLu+UIIIYQQQgghhBBCCCGEmB3+AJUCj1SQZSlaAAAAAElFTkSuQmCC" />Email</button>
+            </div>
+        </div>
+      </div>
+        
+        
+        
           
         
         <ReportComponent ref={componentRef} />

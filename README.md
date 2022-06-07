@@ -11,14 +11,23 @@
  - Send reports to registered email
  - Caching system logic embedded to obtain history of scans quickly
  - Downloadable reports in pdf format
-## Environmental Variables
+
+## System Architecture
+![architecture diagram](https://res.cloudinary.com/xzen/image/upload/v1654267176/Production_Architecture_1_m0uhxs.png)
+
+## Replication & Usage
+### Clone the repository
+
+```git clone https://github.com/xosteve26/PULSTRAT.git ```
+
+### Creating Environmental Variables
 
 Create a .env file in then frontend & backend folder and add the following
 ##### Backend
 ```
 MONGO_URI = Your Mongo DB ATLAS URI [ Mongo DB connection string ]
 SECRET_KEY = Your Flask Secret Key
-SENDGRID_API_KEY = Your SendGrid API key [ For email functionality ]
+SENDGRID_API_KEY = Your SendGrid API key [ For email functionality ] [Optional]
 ```
 
 ##### Frontend
@@ -29,14 +38,14 @@ REACT_APP_BASE_URL=http://localhost:5000
 ````
 
 
-## Install Dependencies (Frontend)
+### Install Dependencies (Frontend)
 
 ```
 cd frontend
 npm install 
 ```
 
-## Install Dependencies (Backend)
+### Install Dependencies (Backend)
 
 ```
 cd backend
@@ -67,6 +76,7 @@ This  test dataset consists of a total of 624 images, out of which 234 images be
 # Create frontend production build [serve static build]
 cd frontend
 npm run build
+serve -s build
 ```
 
 

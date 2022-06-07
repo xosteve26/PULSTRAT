@@ -1,10 +1,16 @@
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 const AboutUsScreen = () => {
   return (
     <>
+      <HelmetProvider>
+        <Helmet>
+          <title>Pulstrat | About</title>
+        </Helmet>
+      </HelmetProvider>
       <Header />
       <h1 className="pt-32 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl pb-3">
         <span className="block xl:inline ">About</span>

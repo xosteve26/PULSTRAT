@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+// import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Suspense, lazy} from 'react';
+import { ToastContainer} from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
+const App = lazy(() => import('./App'))
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Suspense fallback={<div>...Loading</div>}>
+        <App />
+        <ToastContainer />
+    </Suspense>
   </React.StrictMode>,
   document.getElementById('root')
 );

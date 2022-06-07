@@ -4,7 +4,8 @@ import Footer from '../components/Footer';
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { LineWobble } from '@uiball/loaders'
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { toast } from 'react-toastify';
 
 
 const UploadScreen = () => {
@@ -20,8 +21,17 @@ const UploadScreen = () => {
         const loggedIn = window.localStorage.getItem("LoggedIn")
         console.log("LOGGED IN ", loggedIn);
         if (!loggedIn || loggedIn === "false") {
-            console.log("IN IF")
-            alert("Please login to access this route")
+        
+            toast.error("Please login to access this route", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
             return navigate("/sign-in")
         }
 
@@ -47,6 +57,16 @@ const UploadScreen = () => {
             'withCredentials' : true
         }
         if (!file) {
+            toast.error("Kindly Upload an image", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
             setError(true)
             setLoading(false)
         }
@@ -75,6 +95,11 @@ const UploadScreen = () => {
    
     return (
         <>
+        <HelmetProvider>
+            <Helmet>
+                <title>Pulstrat | Upload</title>
+            </Helmet>
+        </HelmetProvider>
         <Header />
     
         <section className="w-full px-8 py-16 bg-gray-100 xl:px-8">

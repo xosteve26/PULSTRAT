@@ -4,14 +4,17 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import axios from 'axios'
 import { Ripples } from '@uiball/loaders'
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const SignInSCreen = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
     const [Loading, setLoading] = useState(false)
-
+    const [errorMessage, setErrorMessage] = useState('')
     const submitHandler = async(e) => {
         e.preventDefault()
         setLoading(true)
@@ -22,11 +25,33 @@ const SignInSCreen = () => {
         if(res.data.status){
             window.localStorage.setItem('LoggedIn', true)
             window.localStorage.setItem("userData", res.data.userData)
-            window.location.href = '/'
             
+            toast.success("Logged In Successfully", {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+            return navigate("/")
+        
         }
         else{
+            setErrorMessage(res.data.message)
             window.localStorage.setItem('LoggedIn', false)
+            toast.error(res.data.message, {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
             setError(true)
             setLoading(false)
         }
@@ -34,6 +59,11 @@ const SignInSCreen = () => {
     }
     return (
         <>
+        <HelmetProvider>
+            <Helmet>
+                <title>Pulstrat | Login</title>
+            </Helmet>
+        </HelmetProvider>
         <Header />
         <section className="w-full px-8 py-16 bg-gray-100 xl:px-8">
             <div className="max-w-5xl mx-auto mt-20">
@@ -66,7 +96,7 @@ const SignInSCreen = () => {
                                         
                                     </div>
                             </form>
-                                {error && <div className="flex justify-between items-center text-red-400"> <span>Invalid Credentials</span>  </div>}
+                                {error && <div className="flex justify-between items-center text-red-400"> <span>{errorMessage}</span>  </div>}
                             <p className="w-full mt-4 text-sm text-center text-gray-500">Don't have an account? <a href="/sign-up" className="text-blue-500 underline">Sign up here</a></p>
                         </div>
                     </div>

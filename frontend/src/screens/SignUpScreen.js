@@ -3,8 +3,13 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useState } from 'react'
 import axios from 'axios'
+import { Ripples } from '@uiball/loaders'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const SignUpScreen = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -14,14 +19,36 @@ const SignUpScreen = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault()
+        setLoading(true)
         const baseURL = process.env.REACT_APP_BASE_URL
         const res = await axios.post(`${baseURL}/register`, { email, password, name })
         console.log(res.data.status)
         if (res.data.status) {
             window.localStorage.setItem('LoggedIn', false)
-            window.location.href = '/sign-in'
+            toast.success("Registered Successfully, Kindly Login", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+            return navigate("/sign-in")
+           
         }
         else {
+            toast.error(res.data.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
             setError(true)
             setLoading(false)
             setMessage(res.data.message)
@@ -30,6 +57,11 @@ const SignUpScreen = () => {
     }
     return (
         <>
+            <HelmetProvider>
+                <Helmet>
+                    <title>Pulstrat | Registration</title>
+                </Helmet>
+            </HelmetProvider>
             <Header />
             <section className="w-full bg-white">
 
@@ -48,7 +80,7 @@ const SignUpScreen = () => {
                                     {/* <a href="#_"
                                         className="inline-block px-8 py-5 text-xl font-medium text-center text-white transition duration-200 bg-yellow-400 hover:bg-yellow-500 ease rounded-full">Get
                                         Started Today</a> */}
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                 </div>
                             </div>
                         </div>
@@ -79,9 +111,15 @@ const SignUpScreen = () => {
                                                 placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                                     </div>
                                     <div className="relative">
-                                        <button type='submit'
+                                        {!Loading && <button type='submit'
                                             className="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-yellow-400 hover:bg-yellow-500 ease rounded-full">Create
-                                            Account</button>
+                                            Account</button>}
+                                            {Loading && <div className="flex justify-center"><div><Ripples
+                                                size={45}
+                                                speed={2}
+                                                color="black"
+                                                className='items-center'
+                                            /> </div></div>}
                                         {error && <div className="pt-6 flex justify-between items-center text-red-400"> <span>{Message}</span>  </div>}
                                     </div>
                                   

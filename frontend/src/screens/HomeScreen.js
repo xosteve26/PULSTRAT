@@ -2,28 +2,37 @@ import React from 'react'
 import FAQ from '../components/FAQ'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useEffect } from 'react'
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Navigate, useNavigate } from 'react-router-dom'
+
 
 const HomeScreen = () => {
+    const navigate=useNavigate()
     const userExists=window.localStorage.getItem('LoggedIn');
     const userData=JSON.parse(window.localStorage.getItem('userData'));
-    
+    console.log(userExists,"USER EXISTS")
+    const logout = window.localStorage.getItem('Logout');
 
-    useEffect(async() => {
+    useEffect(() => {
+        if(logout == true){
+            return navigate("/")
+        }
+        
         if(userExists){
-            const id={id:userData["id"]["$oid"]}
-            // const data =await axios.post(process.env.REACT_APP_BASE_URL + '/' ,id,{ withCredentials: true });
-            // const numberOfScans = data.data.nScan;
-            // console.log(numberOfScans)
+            console.log(window.localStorage.getItem("LoggedIn"))
             console.log(window.sessionStorage.getItem('cacheAvailable'))
             !window.sessionStorage.getItem('cacheRecords') && window.sessionStorage.setItem("cacheRecords",JSON.stringify({}))
-            // window.sessionStorage.setItem('originalNumberOfScans',numberOfScans);
-            // window.sessionStorage.setItem('numberOfScans',numberOfScans);
+          
         }
-    } , [])
+    } , [userExists])
     return (
         <>
+        <HelmetProvider>
+            <Helmet>
+                <title>Pulstrat | Home</title>
+            </Helmet>
+        </HelmetProvider>
         <Header />
             <section className="px-2 py-20 bg-white md:px-0">
                 <div className="container items-center max-w-6xl px-8 mt-20 mx-auto xl:px-5">
@@ -38,7 +47,7 @@ const HomeScreen = () => {
                                 <div className="relative flex flex-col sm:flex-row sm:space-x-4">
                                     <a href="/upload" className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-yellow-400 rounded-md sm:mb-0 hover:bg-yellow-500 sm:w-auto">
                                         Upload
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </a>
                                     <a href="/dashboard/1" className="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600">
                                         Dashboard
@@ -54,7 +63,7 @@ const HomeScreen = () => {
                         <div className="relative flex flex-col sm:flex-row sm:space-x-4">
                             <a href="/sign-in" className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-yellow-400 rounded-md sm:mb-0 hover:bg-yellow-500 sm:w-auto">
                             Get Started
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                             </a>
                             <a href="/about" className="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600">
                             Learn More
@@ -64,7 +73,7 @@ const HomeScreen = () => {
                     </div>
                     <div className="w-full md:w-1/2">
                         <div className="w-full h-auto overflow-hidden rounded-md shadow-xl sm:rounded-xl">
-                            <img src="images/medical_hero_2.svg" />
+                            <img alt="medical hero" src="images/medical_hero_2.svg" />
                         </div>
                     </div>
                     </div>
@@ -105,7 +114,7 @@ const HomeScreen = () => {
                 
 
                     <div className="box-border relative w-full max-w-md px-4 mt-10 mb-4 text-center bg-no-repeat bg-contain border-solid md:mt-0 md:max-w-none lg:mb-0 md:w-1/2">
-                        <img src="https://cdn.devdojo.com/images/december2020/settings.png" className="pl-4 sm:pr-10 xl:pl-10 lg:pr-32" />
+                        <img alt="robot" src="https://cdn.devdojo.com/images/december2020/settings.png" className="pl-4 sm:pr-10 xl:pl-10 lg:pr-32" />
                     </div>
                 </div>
                 <div
@@ -114,7 +123,7 @@ const HomeScreen = () => {
                     
                     <div
                         className="box-border relative w-full max-w-md px-4 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10">
-                        <img src="images/features_1.svg" className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20" />
+                        <img alt="medical mini" src="images/features_1.svg" className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20" />
                     </div>
                 
             

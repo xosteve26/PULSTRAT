@@ -7,11 +7,12 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { ThreeBody } from '@uiball/loaders'
-
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import DashboardTable from '../components/DashboardTable'
+import { toast } from 'react-toastify';
 
 const DashboardScreen = () => {
-    
+    console.log(window.location)
     const navigate = useNavigate();
     const params = useParams();
     const [data, setData] = useState([]);
@@ -32,7 +33,16 @@ const DashboardScreen = () => {
         console.log("LOGGED IN ", loggedIn);
         if (!loggedIn || loggedIn === "false") {
             console.log("IN IF")
-            alert("Please login to access this route")
+            toast.error("Please login to access this route", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
             return navigate("/sign-in")
         }
         
@@ -45,22 +55,41 @@ const DashboardScreen = () => {
         }
         if(!received){
             console.log("IN FETCH DATA")
-            const res = await axios.post(process.env.REACT_APP_BASE_URL + '/scans/' + parseInt(pageNumber), numberData, { withCredentials: true });
-            setData(res.data.scans);
-            console.log("DATA", res.data)
-            setTotalPages(res.data.totalPages)
-            console.log("TOTAL PAGES", totalPages)
-           
-            console.log("IN IF")
-            cacheRecords[pageNumber]=true
-            window.sessionStorage.setItem("cacheRecords",JSON.stringify(cacheRecords))
-            console.log("CACHE RECORDS",cacheRecords)
+            try{
+                const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/scans/${parseInt(pageNumber)}`, numberData, { withCredentials: true })
+                setData(res.data.scans);
+                console.log("DATA", res.data)
+                setTotalPages(res.data.totalPages)
+                console.log("TOTAL PAGES", totalPages)
 
-            console.log("data", res.data)
+                console.log("IN IF")
+                cacheRecords[pageNumber] = true
+                window.sessionStorage.setItem("cacheRecords", JSON.stringify(cacheRecords))
+                console.log("CACHE RECORDS", cacheRecords)
+
+                console.log("data", res.data)
+                setReceived(true);
+                console.log("RECEIVED", received)
+
+            }
+            catch(e){
+                console.log("IN CATCH")
+                toast.error(e.response.data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light"
+                })
+                return navigate("/")
+            }
+            
         }
         
-        setReceived(true);
-        console.log("RECEIVED",received)
+        
         // console.log("dates", dateOrder)
 
         // console.log(res.data.scans);
@@ -80,6 +109,11 @@ const DashboardScreen = () => {
     
     return(
     <>
+            <HelmetProvider>
+                <Helmet>
+                    <title>Pulstrat | Dashboard</title>
+                </Helmet>
+            </HelmetProvider>
         <Header />
            
             <h1 className="pt-32 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl pb-3">

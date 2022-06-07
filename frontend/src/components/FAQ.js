@@ -65,7 +65,7 @@ const FAQ = () => {
 
                                     
                                         item.open ?
-                                        <li onClick={() => clickHandler(index)} className="mb-4 px-4 lg:px-12 py-8 bg-white rounded-2xl border-2">
+                                        <li key={index} onClick={() => clickHandler(index)} className="mb-4 px-4 lg:px-12 py-8 bg-white rounded-2xl border-2">
                                             <div className="flex w-full text-left cursor-pointer">
                                                 <div className="w-auto mr-8">
                                                     <span   className="flex items-center justify-center w-12 h-12 text-lg text-white font-bold bg-yellow-400 rounded-full">{index + 1}</span>
@@ -86,7 +86,7 @@ const FAQ = () => {
                                                 </div>
                                             </li>
                                             :
-                                        <li onClick={() => clickHandler(index)} className="mb-4 px-4 lg:px-12 py-8 bg-white rounded-2xl border-2">
+                                        <li key={index} onClick={() => clickHandler(index)} className="mb-4 px-4 lg:px-12 py-8 bg-white rounded-2xl border-2">
                                             <div className="flex w-full text-left cursor-pointer">
                                                     <div className="w-auto mr-8">
                                                         <span className="flex items-center justify-center w-12 h-12 text-lg text-white font-bold bg-yellow-400 rounded-full">{index + 1}</span>
@@ -95,7 +95,7 @@ const FAQ = () => {
                                                     <div className="flex items-center justify-between">
                                                         <h3 className="text-xl font-bold">{item.question}</h3>
                                                             <span className="ml-4">
-                                                            <svg class="w-4 h-4" width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <svg className="w-4 h-4" width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M16.0185 0.999999C16.2905 0.732 16.7275 0.732 16.9975 0.999999C17.2675 1.268 17.2685 1.701 16.9975 1.969L9.0895 9.799C8.8195 10.067 8.3825 10.067 8.1105 9.799L0.2025 1.969C-0.0675004 1.701 -0.0675004 1.268 0.2025 1C0.4735 0.732 0.9115 0.732 1.1815 1L8.6005 8.141L16.0185 0.999999Z" fill="#f59e0b"></path>
                                                             </svg>
                                                             </span>

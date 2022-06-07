@@ -31,6 +31,7 @@ jobs:
             build-args: |
               URI=${{ secrets.MONGO_URI }}
               SECRET=${{ secrets.SECRET_KEY }}
+              SENDGRID=${{ secrets.SENDGRID_API_KEY }}
             tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pulstrat:backend
 
 

@@ -1,21 +1,40 @@
 import React from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Header = () => {
+    const navigate=useNavigate()
     const userExists=window.localStorage.getItem('LoggedIn')
     console.log(typeof(userExists))
-
+    console.log(window.location)
     const logoutHandler = async() =>{
-        window.sessionStorage.clear()
-        window.localStorage.clear()
+        
         const res=await axios.get(process.env.REACT_APP_BASE_URL+'/logout',{withCredentials:true})
         if (res.data.status){
-            window.location.href = '/'
+            window.sessionStorage.clear()
+            window.localStorage.clear()
+            window.localStorage.setItem('Logout',true)
+            
+            toast.success("Logged out successfully", {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+            })
+            return navigate("/")
+            
+            
+           
         }  
     }
     return (
         <>
-            <section className="fixed w-full px-8 antialiased bg-white bg-opacity-80 bg-clip-padding backdrop-filter backdrop-blur-lg z-50" style={{"backdrop-filter": "blur(10px)"}}>
+            <section className="fixed w-full px-8 antialiased bg-white bg-opacity-80 bg-clip-padding backdrop-filter backdrop-blur-lg z-50" style={{"backdropFilter": "blur(10px)"}}>
                 <div className="mx-auto max-w-7xl">
 
                     <nav className="relative z-50 h-24 select-none" x-data="{ showMenu: false }">
