@@ -77,9 +77,11 @@ def login():
     data = json.loads(request.data)
     email = data["email"]
     password = data["password"]
+    if not email or not password:
+        return {"status": False, "message": "Kindly enter valid values in all fields"}
     findUser = user_collection.find_one({"email":email})
     if not findUser:
-        return {"status":False}
+        return {"status":False, "message":"No user with this email was found"}
     print("USER", findUser)
     
     
@@ -89,6 +91,7 @@ def login():
         session["email"] = email
         session["name"] = findUser["name"]
         session["id"] = helpers.parse_json(id)
+        print("SESSION @ LOGIN",session)
 
         print("NAME", session["name"])
         print(id)
@@ -132,49 +135,42 @@ def get_scans(id):
 
     cacheRecords=data["cacheRecords"]
     print(cacheRecords)
-
-    currentCountOfDocuments = prediction_collection.count_documents(
-        {"userId": ObjectId(session["id"]["$oid"])})
+    try:
+        currentCountOfDocuments = prediction_collection.count_documents(
+            {"userId": ObjectId(session["id"]["$oid"])})
+    
+    except:
+        return jsonify(message="User Not Authenticated"), 401
+    
     # Cache System Logic
-    if (str(pageNumber) in cacheRecords):
-        if(cacheRecords[str(pageNumber)]):
-            if('scans'+str(pageNumber) in session):
-                if(session['scans'+str(pageNumber)][1] == currentCountOfDocuments):
-                    print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
-                    print(len(session['scans'+str(pageNumber)][0]))
-                    return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
-                else:
-                    scans, totalDocuments = helpers.MongoFetch(
-                        pageSize, pageNumber, message="DATA FETCHED FROM DB - Total documents don't match")
-
-                    return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
-
-            else:
-            
-                scans, totalDocuments = helpers.MongoFetch(
-                    pageSize, pageNumber, message="DATA FETCHED FROM DB - Not Found in sessions")
-
-
-                return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
-        else:
-
-            scans, totalDocuments = helpers.MongoFetch(
-                pageSize, pageNumber, message="DATA FETCHED FROM DB - cache not available cache records states false")
-
-            return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
-    else:
-
+    if (str(pageNumber) in cacheRecords) and cacheRecords[str(pageNumber)] and 'scans'+str(pageNumber) in session and session['scans'+str(pageNumber)][1] == currentCountOfDocuments:
+        print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
+        print(len(session['scans'+str(pageNumber)][0]))
+        return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
+    try:
         scans, totalDocuments = helpers.MongoFetch(
-            pageSize, pageNumber, message="DATA FETCHED FROM DB - page number not in cache records")
-        return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize))
-
+            pageSize, pageNumber, message="DATA FETCHED FROM DB")
+        return jsonify(scans=scans, totalPages=math.ceil(totalDocuments/pageSize)), 200
+    except:
+        return jsonify(message="Couldn't fetch data") , 401
+    
+  
 
 
 
 @app.route('/report/<string:id>', methods=["GET"])
 def report(id):
-    reportFile=helpers.parse_json(prediction_collection.find_one({"_id":ObjectId(id)},{"heatmapImage":0}))
-    return jsonify(report=reportFile)
+    try:
+        user_exists=session["id"]["$oid"]
+        try:
+            reportFile = helpers.parse_json(prediction_collection.find_one({"_id": ObjectId(id), "userId":ObjectId(session["id"]["$oid"])}, {"heatmapImage": 0}))
+            if not reportFile:
+                return jsonify(message="Cannot Access Requested Report"), 401
+            return jsonify(report=reportFile), 200
+        except:
+            return jsonify(message="Couldn't fetch report, incorrect report ID"), 400
+    except:
+        return jsonify(message="User Not Authenticated"), 401
 
 
 @app.route('/email', methods=["POST"])
@@ -191,39 +187,40 @@ def email():
     message.from_email= From(
         email="noreplyxzen@gmail.com"
     )
+    try:
+        message.subject = Subject("Your Scan Report"+", "+emailData["userName"])
+        message.template_id="d-1a3d62ced7a94aeba2ddbee2cac2fc35"
+        message.dynamic_template_data={
+            "user_name":emailData["userName"],
+            "user_email":emailData["userEmail"],
+            "scan_id":"#"+emailData["scanId"],
+            "prediction":emailData["prediction"],
+            "scan_date":emailData["scanTime"],
+            "current_date": str(datetime.datetime.utcnow())
+        }
+    except:
+        return jsonify(message="Email Data not found"), 400
 
-    message.subject = Subject("Your Scan Report"+", "+emailData["userName"])
-    message.template_id="d-1a3d62ced7a94aeba2ddbee2cac2fc35"
-    message.dynamic_template_data={
-        "user_name":emailData["userName"],
-        "user_email":emailData["userEmail"],
-        "scan_id":"#"+emailData["scanId"],
-        "prediction":emailData["prediction"],
-        "scan_date":emailData["scanTime"],
-        "current_date": str(datetime.datetime.utcnow())
-    }
-
-    sendgrid_client = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
-
-
-
+ 
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
         print(response.status_code)
         print(response.body)
         print(response.headers)
+        return {"status": True, "message": "Email sent successfully"}, 200
     except Exception as e:
         print(e.message)
-    return {"status":True, "message":"Email sent successfully"}
+        return {"status":False, "message":"Error sending email"}, 200
+    
 
 
 @app.route('/logout',methods=["GET"])
 def logout():
     session.clear()
-    original = "uploaded_images/original"
-    hm = "uploaded_images/heatmaps"
-    localized = 'uploaded_images/localized'
+    original = "../uploaded_images/original"
+    hm = "../uploaded_images/heatmaps"
+    localized = '../uploaded_images/localized'
     print(os.path.exists(hm), os.path.exists(localized), os.path.exists(original))
     if os.path.exists(hm):
         print("REMOVED HEATMAPS FOLDER")
@@ -234,4 +231,4 @@ def logout():
     if os.path.exists(original):
         print("REMOVED ORIGINAL FOLDER")
         shutil.rmtree((mod_path / '../uploaded_images/original').resolve())
-    return {"status":True}
+    return {"status":True}, 200
