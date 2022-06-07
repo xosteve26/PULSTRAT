@@ -7,11 +7,13 @@ import ReportScreen from './screens/ReportScreen';
 import UploadScreen from './screens/UploadScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import AboutUsScreen from './screens/AboutUsScreen';
+import Four04Screen from './screens/Four04Screen';
 
 const App = ()=> {
   return (
     <Router>
       <Routes>
+        <Route path="*" element={<Four04Screen />} />
         <Route path="/" element={<HomeScreen/>} exact/>
         <Route path="/sign-up" element={<SignUpScreen/>}/>
         <Route path="/sign-in" element={<SignInSCreen/>}/>
