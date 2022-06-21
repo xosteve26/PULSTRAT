@@ -100,7 +100,7 @@ const SignUpScreen = () => {
                                     </div>
                                     <div className="relative">
                                         <label className="font-medium text-gray-900">Email</label>
-                                        <input type="text"
+                                        <input type="email"
                                             className="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-100 focus:outline-none focus:ring-4 focus:ring-black-400 focus:ring-opacity-50 rounded-full"
                                                 placeholder="Enter Your Email Address" onChange={(e) => setEmail(e.target.value)}/>
                                     </div>
