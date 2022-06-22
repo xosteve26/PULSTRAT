@@ -5,7 +5,7 @@ const DashboardTable = (props) => {
     const navigate = useNavigate();
     const data= props.data
     const dates=props.dates
-    console.log(data,dates)
+ 
   return (
       <>      {data.length == 0 && <>
       <h3 className="pt-32 text-center text-4xl  tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl pb-3">
@@ -13,7 +13,7 @@ const DashboardTable = (props) => {
       </h3></>}
               {dates && dates.map(date => {
                   const filtered = data.filter(x => x.timestamps["$date"].slice(0, 10) === date)
-                  console.log("FILTERED", filtered)
+         
                   return (
                       <>
                           <h1 className="px-6 py-4 text-left text-1xl font-extrabold tracking-tight text-gray-900 sm:text-md md:text-lg lg:text-1xl xl:text-2xl pb-3">

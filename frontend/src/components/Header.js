@@ -6,8 +6,7 @@ import { toast } from 'react-toastify'
 const Header = () => {
     const navigate=useNavigate()
     const userExists=window.localStorage.getItem('LoggedIn')
-    console.log(typeof(userExists))
-    console.log(window.location)
+
     const logoutHandler = async() =>{
         
         const res=await axios.get(process.env.REACT_APP_BASE_URL+'/logout',{withCredentials:true})

@@ -12,12 +12,12 @@ import DashboardTable from '../components/DashboardTable'
 import { toast } from 'react-toastify';
 
 const DashboardScreen = () => {
-    console.log(window.location)
+
     const navigate = useNavigate();
     const params = useParams();
     const [data, setData] = useState([]);
     const [received, setReceived] = useState(false);
-    console.log("RECEIVED BEGINING",received)
+  
     const [dates, setDates] = useState(null);
     const [pageN, setPageN] = useState(1);
     const [totalPages, setTotalPages] = useState(null);
@@ -26,13 +26,13 @@ const DashboardScreen = () => {
     const cacheRecords=JSON.parse(window.sessionStorage.getItem("cacheRecords"))
 
     
-    console.log("data begining",data)
+
     
     useEffect(async() => {
         const loggedIn = window.localStorage.getItem("LoggedIn")
-        console.log("LOGGED IN ", loggedIn);
+       
         if (!loggedIn || loggedIn === "false") {
-            console.log("IN IF")
+      
             toast.error("Please login to access this route", {
                 position: "top-right",
                 autoClose: 5000,
@@ -48,32 +48,27 @@ const DashboardScreen = () => {
         
         const pageNumber = params.pageNumber || 1;
         setPageN(pageNumber);
-        console.log("PAGE NUMB", pageN)
+      
 
         const numberData={
             "cacheRecords":cacheRecords
         }
         if(!received){
-            console.log("IN FETCH DATA")
+        
             try{
                 const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/scans/${parseInt(pageNumber)}`, numberData, { withCredentials: true })
                 setData(res.data.scans);
-                console.log("DATA", res.data)
+           
                 setTotalPages(res.data.totalPages)
-                console.log("TOTAL PAGES", totalPages)
 
-                console.log("IN IF")
                 cacheRecords[pageNumber] = true
                 window.sessionStorage.setItem("cacheRecords", JSON.stringify(cacheRecords))
-                console.log("CACHE RECORDS", cacheRecords)
-
-                console.log("data", res.data)
+             
                 setReceived(true);
-                console.log("RECEIVED", received)
-
+            
             }
             catch(e){
-                console.log("IN CATCH")
+                
                 toast.error(e.response.data.message, {
                     position: "top-right",
                     autoClose: 5000,
@@ -89,21 +84,10 @@ const DashboardScreen = () => {
             
         }
         
-        
-        // console.log("dates", dateOrder)
 
-        // console.log(res.data.scans);
-       
         const dateOrder = [... new Set(data.map(x => x.timestamps["$date"].slice(0, 10)))]
         setDates(dateOrder)
 
-        console.log(dateOrder)
-
-
-        console.log(received)
-        console.log("dates, data",dates,data)
-        console.log("DATES",dates)
-        console.log("PAGES", totalPages)
     },[received,navigate]);
 
     

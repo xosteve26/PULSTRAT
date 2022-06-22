@@ -19,7 +19,7 @@ const UploadScreen = () => {
 
     useEffect(() => {
         const loggedIn = window.localStorage.getItem("LoggedIn")
-        console.log("LOGGED IN ", loggedIn);
+        
         if (!loggedIn || loggedIn === "false") {
         
             toast.error("Please login to access this route", {
@@ -36,7 +36,7 @@ const UploadScreen = () => {
         }
 
     }, [navigate])
-    console.log(file)
+    
  
     const fileUploadHandler = (e) => {
   
@@ -75,7 +75,7 @@ const UploadScreen = () => {
             data.append('file', file)
             data.append('filename', fileName)
             const res = await axios.post(`${baseURL}/upload`, data, headers)
-            console.log("RES",res)
+            
             setLoading(false)
             // const numberOfScans=window.sessionStorage.getItem('numberOfScans')
             // window.sessionStorage.setItem('numberOfScans',parseInt(numberOfScans)+1)

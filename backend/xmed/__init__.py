@@ -5,7 +5,7 @@ from flask_cors import CORS
 import logging
 import pymongo
 import json
-# import redis
+import redis
 from tensorflow.keras.models import load_model
 
 from dotenv import load_dotenv

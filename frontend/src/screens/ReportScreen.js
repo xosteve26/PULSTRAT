@@ -92,7 +92,6 @@ const ReportComponent = React.forwardRef((props, ref) => {
                     )}
                   </td>
 
-                  {/* <td className="text-right">360.00</td> */}
                 </tr>
               </tbody>
             </table>
@@ -106,13 +105,6 @@ const ReportComponent = React.forwardRef((props, ref) => {
             <div className="pl-6">Localized Scan
             <img alt="localized-x-ray" src={"data:image/jpeg;base64," + location.state['localizedImage']} /></div><br />
           </div>
-
-          {/* <div className="flex justify-center ">
-            <div>
-            <img src={"data:image/jpeg;base64," + location.state['heatmapImage']} />
-            </div>
-
-          </div> */}
 
         </div>  
       
@@ -134,30 +126,28 @@ const ReportScreen = () => {
   useEffect(() => {
     
     const loggedIn = localStorage.getItem("LoggedIn")
-    console.log("LOGGED IN ", loggedIn);
+    
     if (!loggedIn || loggedIn === "false") {
-      console.log("IN IF")
+      
       alert("Please login to access this route")
       return navigate("/sign-in")
     }
     
     if(!window.sessionStorage.getItem(id)){
       if (!ready) {
-        console.log("FETCH REPORT")
+        
         
           async function fetchData() {
             try{
                 const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/report/${id}`, { withCredentials: true })
-
                 window.sessionStorage.setItem(res.data.report["_id"]["$oid"], JSON.stringify(res.data.report))
-                console.log(res.data.report)
                 location.state = res.data.report
                 setReady(true)
                 
               }
             
             catch(e){
-              console.log("IN CATCH")
+              
               return navigate('/404')
             }
     
@@ -167,9 +157,7 @@ const ReportScreen = () => {
       
     }else{
       if(!ready){
-        console.log("IN ELSE CACHE REPORT")
         location.state = JSON.parse(window.sessionStorage.getItem(id))
-        console.log(location)
         setReady(true)
       }
       
@@ -189,7 +177,7 @@ const ReportScreen = () => {
     }
     const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/email`, emailData, { withCredentials: true })
     const data = await res.data;
-    console.log(data)
+    
     if (data.status){
       toast.success("Email sent successfully", {
         position: "top-right",

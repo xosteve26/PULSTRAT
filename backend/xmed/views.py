@@ -26,7 +26,7 @@ def initial():
 
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
-    print("Requested files", request.files)
+    
     original = "uploaded_images/original"
     hm="uploaded_images/heatmaps"
     localized='uploaded_images/localized'
@@ -41,7 +41,7 @@ def fileUpload():
     destination = "/".join(["./uploaded_images/original", filename])
     
 
-    print(destination)
+    
     file.save(destination)
 
     response = {'filePath': destination}
@@ -51,9 +51,7 @@ def fileUpload():
         encoded_image = base64.b64encode(img_file.read())
    
     result = helpers.predict(destination, filename)
-    print("RES =", result)
     
-    # CDN_URL= helpers.cdn_upload(destination,(180,180), filename)
     heatmap_dest = "./uploaded_images/heatmaps/"+filename
     with open(heatmap_dest, "rb") as heatmap_img_file:
         encoded_heatmap_image = base64.b64encode(heatmap_img_file.read())
@@ -62,18 +60,17 @@ def fileUpload():
     with open(localized_dest, "rb") as localized_img_file:
         encoded_localized_image = base64.b64encode(localized_img_file.read())
     
-    print("upload", session.get('email'))
+    
     scan_id = prediction_collection.insert_one(
         {"result": bool(result), "userId": ObjectId(session["id"]["$oid"]), "name": session["name"],"fileName":filename, "originalImage": encoded_image.decode("utf-8"), "heatmapImage": encoded_heatmap_image.decode("utf-8"), "localizedImage": encoded_localized_image.decode("utf-8"), "timestamps": datetime.datetime.utcnow()})
-    print(session["id"]["$oid"])
+    
     scan_id = helpers.parse_json(scan_id.inserted_id)
-    print(scan_id['$oid'])
-    print(type(scan_id['$oid']))
+ 
     return jsonify(id=scan_id['$oid'])
 
 @app.route('/login', methods=["POST"])
 def login():
-    print("IN LOGIN")
+    
     data = json.loads(request.data)
     email = data["email"]
     password = data["password"]
@@ -82,7 +79,6 @@ def login():
     findUser = user_collection.find_one({"email":email})
     if not findUser:
         return {"status":False, "message":"No user with this email was found"}
-    print("USER", findUser)
     
     
     hashedPassword = findUser["password"]
@@ -91,15 +87,11 @@ def login():
         session["email"] = email
         session["name"] = findUser["name"]
         session["id"] = helpers.parse_json(id)
-        print("SESSION @ LOGIN",session)
 
-        print("NAME", session["name"])
-        print(id)
-        print("It Matches!")
         return {"status":True, "userData":json.dumps({"id":helpers.parse_json(id),"name":findUser["name"], "email":findUser["email"]})}
     else:
-        print("It Does not Match :(")
-        return {"status":False}
+        
+        return {"status":False, "message":"Incorrect Credentials"}
 
 
 @app.route('/register', methods=["POST"])
@@ -108,12 +100,10 @@ def register():
     name = data["name"]
     email = data["email"]
     password = data["password"]
-    print(name,email,password)
+    
     if not name or not email or not password:
-        print(" NO DATA")
         return {"status": False, "message": "Enter Valid Values In All Fields"}
     if(user_collection.find_one({"email": email})):
-        print(" EMAIL EXISTS")
         return {"status": False, "message": "USER WITH THIS EMAIL EXISTS"}
     else:
         hashedPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
@@ -131,10 +121,7 @@ def get_scans(id):
     pageNumber=int(id) if id else 1
     
     data=json.loads(request.data)
-    print(type(data["cacheRecords"]))
-
     cacheRecords=data["cacheRecords"]
-    print(cacheRecords)
     try:
         currentCountOfDocuments = prediction_collection.count_documents(
             {"userId": ObjectId(session["id"]["$oid"])})
@@ -144,8 +131,7 @@ def get_scans(id):
     
     # Cache System Logic
     if (str(pageNumber) in cacheRecords) and cacheRecords[str(pageNumber)] and 'scans'+str(pageNumber) in session and session['scans'+str(pageNumber)][1] == currentCountOfDocuments:
-        print("CACHED RESPONSE FOR PAGE NUMBER",str(pageNumber))
-        print(len(session['scans'+str(pageNumber)][0]))
+        
         return jsonify(scans=session['scans'+str(pageNumber)][0], totalPages=int(math.ceil(session['scans'+str(pageNumber)][1]/pageSize)))
     try:
         scans, totalDocuments = helpers.MongoFetch(
@@ -177,8 +163,7 @@ def report(id):
 def email():
     
     emailData=json.loads(request.data)
-    print(emailData)
-    print(type(emailData["prediction"]))
+
     message.to=[
         To(
             email=emailData["userEmail"]
@@ -205,12 +190,8 @@ def email():
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
         return {"status": True, "message": "Email sent successfully"}, 200
     except Exception as e:
-        print(e.message)
         return {"status":False, "message":"Error sending email"}, 200
     
 
@@ -221,14 +202,11 @@ def logout():
     original = "../uploaded_images/original"
     hm = "../uploaded_images/heatmaps"
     localized = '../uploaded_images/localized'
-    print(os.path.exists(hm), os.path.exists(localized), os.path.exists(original))
+    
     if os.path.exists(hm):
-        print("REMOVED HEATMAPS FOLDER")
         shutil.rmtree((mod_path / '../uploaded_images/heatmaps').resolve())
     if os.path.exists(localized):
-        print("REMOVED LOCALIZED FOLDER")
         shutil.rmtree((mod_path / '../uploaded_images/localized').resolve())
     if os.path.exists(original):
-        print("REMOVED ORIGINAL FOLDER")
         shutil.rmtree((mod_path / '../uploaded_images/original').resolve())
     return {"status":True}, 200

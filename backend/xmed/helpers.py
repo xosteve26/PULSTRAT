@@ -31,7 +31,7 @@ def localized_heatmap_generator(img_path,img_size,filename):
     plt.matshow(heatmap)
     plt.savefig('./uploaded_images/heatmaps/'+filename)
     localized_image=save_and_display_gradcam(img_path, heatmap_unsaved, filename)
-    print(model.summary())
+    
     
     
     
@@ -40,24 +40,15 @@ def predict(destination, filename):
     test_image = load_img(
         destination, target_size=(180, 180))
     test_image=img_to_array(test_image)
-
-
-
     test_image = test_image - test_image.mean()
     test_image = test_image / (test_image.std() + keras.backend.epsilon())
-
- 
-
     test_image = np.expand_dims(test_image, axis=0)
-    print("shape: ", test_image.shape)
+    
     class_names = {0: 'PNEUMONIA', 1: 'NORMAL'}
 
     predictions = model.predict(test_image)
-    print("Prediction", predictions)
-
-    print("PNEUMONIA result is:", predictions[0][0]>0.5)
+    
     result = predictions[0][0]>0.5
-    print(result)
     localized_heatmap_generator(destination,(180,180),filename)
 
     return result
@@ -116,17 +107,16 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
 
 
 def MongoFetch(pageSize,pageNumber, message):
-    print(message)
     scans = []
     totalDocuments = prediction_collection.count_documents(
         {"userId": ObjectId(session["id"]["$oid"])})
     scansObj = prediction_collection.find(
         {"userId": ObjectId(session["id"]["$oid"])},{"heatmapImage":0}).sort("timestamps", -1).limit(pageSize).skip(pageSize*(pageNumber-1))
-    # print(scansObj)
+    
     for scan in scansObj:
         scans.append(parse_json(scan))
     session['scans'+str(pageNumber)] = [scans, totalDocuments]
-    print(len(scans))
+    
 
 
     return scans,totalDocuments
